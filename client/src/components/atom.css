@@ -812,12 +812,14 @@
   /* Performance optimizations for mobile scrolling */
   .atom-wrapper {
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     contain: layout style paint;
     /* Reduce animation complexity on mobile */
     transform-style: preserve-3d;
+    /* Force GPU acceleration */
+    -webkit-transform: translate3d(0, 0, 0);
   }
   
   /* Optimize ambient particles for mobile */
@@ -988,12 +990,13 @@
   /* Performance optimizations for mobile scrolling */
   .atom-wrapper {
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     contain: layout style paint;
     /* Reduce animation complexity on mobile */
     transform-style: preserve-3d;
+    -webkit-transform: translate3d(0, 0, 0);
   }
   
   /* Optimize ambient particles for mobile */
@@ -1003,7 +1006,7 @@
   
   .ambient-particle {
     will-change: transform, opacity;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
@@ -1020,7 +1023,7 @@
   
   .energy-beam {
     will-change: transform, opacity;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
   }
 
@@ -1028,16 +1031,17 @@
   .orbital-plane,
   .orbital-path {
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    contain: layout style paint;
   }
 
   .proton-ring,
   .proton-ring-outer,
   .proton-ring-inner {
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
@@ -1046,14 +1050,15 @@
   .electron-container,
   .nucleus-core {
     will-change: transform;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    contain: layout style;
   }
 
   .nucleus-pulse {
     will-change: transform, opacity;
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }

@@ -26,10 +26,11 @@ const Atom = () => {
   const mouseY = useMotionValue(0)
   // Less intensive spring config on mobile for better performance
   const springConfig = isMobile 
-    ? { stiffness: 50, damping: 30, mass: 1.2 }
+    ? { stiffness: 30, damping: 35, mass: 1.5 }
     : { stiffness: 80, damping: 25, mass: 0.8 }
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), springConfig)
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springConfig)
+  // Reduced rotation range on mobile for smoother performance
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], isMobile ? [8, -8] : [15, -15]), springConfig)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], isMobile ? [-8, 8] : [-15, 15]), springConfig)
 
   // Language data with enhanced visual properties
   const languages = [
@@ -243,13 +244,13 @@ const Atom = () => {
 
   // Floating particles for ambient effect - reduced on mobile for performance
   const floatingParticles = useMemo(() => {
-    const count = isMobile ? 12 : 40
+    const count = isMobile ? 6 : 40
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       size: Math.random() * 3 + 1,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      duration: Math.random() * 15 + 10,
+      duration: isMobile ? Math.random() * 10 + 8 : Math.random() * 15 + 10,
       delay: Math.random() * 5,
       opacity: Math.random() * 0.4 + 0.1
     }))
@@ -257,12 +258,12 @@ const Atom = () => {
 
   // Energy beams from nucleus - reduced on mobile for performance
   const energyBeams = useMemo(() => {
-    const count = isMobile ? 6 : 12
+    const count = isMobile ? 4 : 12
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       angle: (i / count) * 360,
       length: 60 + Math.random() * 50,
-      duration: 2.5 + Math.random() * 2,
+      duration: isMobile ? 3 + Math.random() * 1.5 : 2.5 + Math.random() * 2,
       delay: i * 0.25
     }))
   }, [isMobile])
@@ -631,7 +632,7 @@ const Atom = () => {
                   rotateZ: [0, 360 * orbit.direction]
                 }}
                 transition={{
-                  duration: orbit.duration,
+                  duration: isMobile ? orbit.duration * 1.5 : orbit.duration,
                   repeat: Infinity,
                   ease: 'linear'
                 }}
@@ -711,7 +712,7 @@ const Atom = () => {
                           rotateZ: [0, -360 * orbit.direction]
                         }}
                         transition={{
-                          duration: orbit.duration,
+                          duration: isMobile ? orbit.duration * 1.5 : orbit.duration,
                           repeat: Infinity,
                           ease: 'linear'
                         }}
