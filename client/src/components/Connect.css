@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem;
+  padding: 5rem 14% 8rem 12%;
   background: transparent;
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -12,7 +12,7 @@
 }
 
 .connect-inner {
-  width: min(1200px, 92%);
+  width: 100%;
   margin: 0 auto;
   color: var(--text-color);
 }
@@ -317,6 +317,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1400px) {
+  .connect-section {
+    padding: 3rem 12% 2.5rem 10%;
+  }
+}
+
 @media (max-width: 968px) {
   .connect-content {
     grid-template-columns: 1fr;
@@ -332,9 +338,15 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .connect-section {
+    padding: 3rem 11% 2.5rem 8%;
+  }
+}
+
 @media (max-width: 768px) {
   .connect-section {
-    padding: 4rem 1.5rem;
+    padding: 3rem 1rem;
   }
 
   .connect-header {
@@ -356,6 +368,12 @@
 
   .contact-card {
     padding: 1.2rem 1.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .connect-section {
+    padding: 3rem 1rem;
   }
 }
 

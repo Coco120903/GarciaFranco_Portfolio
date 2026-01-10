@@ -183,7 +183,7 @@ const About = () => {
             </div>
           </motion.div>
         </motion.div>
-      </div>
+          </div>
       {modalType && (
         <Modal 
           isOpen={modalOpen} 
@@ -193,7 +193,7 @@ const About = () => {
           {modalType === 'cv' ? (
             <div className="gf-embed-wrap">
               <iframe src="/IT-Intern_GarciaFranco_CV.pdf" title="Curriculum Vitae" frameBorder="0" />
-            </div>
+                </div>
           ) : (
             <div className="gf-embed-wrap">
               <iframe src="/IT-Intern_GarciaFranco_Resume.pdf" title="Resume" frameBorder="0" />

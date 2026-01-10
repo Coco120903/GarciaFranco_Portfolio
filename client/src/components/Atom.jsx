@@ -386,57 +386,56 @@ const Atom = () => {
             ))}
           </div>
         )}
-      </div>
 
-      {/* Background energy grid - reduced on mobile for performance */}
-      {!isMobile && (
-        <div className="energy-grid">
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="grid-line horizontal"
-              style={{ top: `${10 + i * 10}%` }}
-              animate={{
-                opacity: [0.02, 0.08, 0.02],
-                scaleX: [0.7, 1, 0.7]
-              }}
-              transition={{
-                duration: 5 + i * 0.5,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: 'easeInOut'
-              }}
-            />
-          ))}
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i + 8}
-              className="grid-line vertical"
-              style={{ left: `${10 + i * 10}%` }}
-              animate={{
-                opacity: [0.02, 0.08, 0.02],
-                scaleY: [0.7, 1, 0.7]
-              }}
-              transition={{
-                duration: 5 + i * 0.5,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: 'easeInOut'
-              }}
-            />
-          ))}
-        </div>
-      )}
+        {/* Background energy grid - reduced on mobile for performance */}
+        {!isMobile && (
+          <div className="energy-grid">
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="grid-line horizontal"
+                style={{ top: `${10 + i * 10}%` }}
+                animate={{
+                  opacity: [0.02, 0.08, 0.02],
+                  scaleX: [0.7, 1, 0.7]
+                }}
+                transition={{
+                  duration: 5 + i * 0.5,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                  ease: 'easeInOut'
+                }}
+              />
+            ))}
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i + 8}
+                className="grid-line vertical"
+                style={{ left: `${10 + i * 10}%` }}
+                animate={{
+                  opacity: [0.02, 0.08, 0.02],
+                  scaleY: [0.7, 1, 0.7]
+                }}
+                transition={{
+                  duration: 5 + i * 0.5,
+                  repeat: Infinity,
+                  delay: i * 0.2,
+                  ease: 'easeInOut'
+                }}
+              />
+            ))}
+          </div>
+        )}
 
-      <motion.div
-        ref={wrapperRef}
-        className={`atom-wrapper ${isNearAtom ? 'near' : ''}`}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d'
-        }}
-      >
+        <motion.div
+          ref={wrapperRef}
+          className={`atom-wrapper ${isNearAtom ? 'near' : ''}`}
+          style={{
+            rotateX,
+            rotateY,
+            transformStyle: 'preserve-3d'
+          }}
+        >
         {/* Outer aura glow */}
         <motion.div
           className="atom-aura aura-outer"
@@ -463,30 +462,6 @@ const Atom = () => {
             ease: 'easeInOut'
           }}
         />
-        
-        {/* Energy field beams */}
-        <div className="energy-field">
-          {energyBeams.map((beam) => (
-            <motion.div
-              key={beam.id}
-              className="energy-beam"
-              style={{
-                transform: `rotate(${beam.angle}deg)`,
-                width: beam.length
-              }}
-              animate={{
-                opacity: [0, 0.7, 0],
-                scaleX: [0.2, 1, 0.2]
-              }}
-              transition={{
-                duration: beam.duration,
-                repeat: Infinity,
-                delay: beam.delay,
-                ease: 'easeInOut'
-              }}
-            />
-          ))}
-        </div>
 
         {/* Complex Multi-Layer Nucleus */}
         <div className="nucleus-container">
