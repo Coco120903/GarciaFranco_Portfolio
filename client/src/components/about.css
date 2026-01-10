@@ -1216,6 +1216,21 @@
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
 }
 
+/* Mobile - Reduce button size */
+@media (max-width: 768px) {
+  .about-btn {
+    padding: 0.65rem 1.4rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-btn {
+    padding: 0.55rem 1.2rem;
+    font-size: 0.75rem;
+  }
+}
+
 
 
 
