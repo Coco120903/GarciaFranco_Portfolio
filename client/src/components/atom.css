@@ -812,22 +812,24 @@
   /* Performance optimizations for mobile scrolling */
   .atom-wrapper {
     will-change: transform;
-    transform: translate3d(0, 0, 0);
+    transform: translateZ(0);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     contain: layout style paint;
+    /* Reduce animation complexity on mobile */
     transform-style: preserve-3d;
-    -webkit-transform: translate3d(0, 0, 0);
-    perspective: 1000px;
   }
   
-  /* Optimize ambient particles for mobile - hide completely */
+  /* Optimize ambient particles for mobile */
   .ambient-particles {
-    display: none !important;
+    contain: layout style paint;
   }
   
   .ambient-particle {
-    display: none !important;
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   
   /* Optimize energy grid - hide on mobile */
@@ -835,84 +837,15 @@
     display: none;
   }
   
-  /* Optimize energy beams - hide completely on mobile */
+  /* Optimize energy beams */
   .energy-field {
-    display: none !important;
+    contain: layout style paint;
   }
   
   .energy-beam {
-    display: none !important;
-  }
-  
-  /* Enhanced GPU acceleration for orbital systems */
-  .orbital-system {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    contain: layout style paint;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .orbital-plane {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  /* Enhanced GPU acceleration for electrons */
-  .electron-container {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .electron {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .electron-core {
-    will-change: transform, box-shadow;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  /* Enhanced GPU acceleration for nucleus */
-  .nucleus-container {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    contain: layout style paint;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .nucleus-glow {
     will-change: transform, opacity;
-    transform: translate3d(0, 0, 0);
+    transform: translateZ(0);
     backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .proton-ring {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
-  
-  .proton {
-    will-change: transform, box-shadow;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
   }
 
   .orbital-system,
@@ -1232,6 +1165,53 @@
   .energy-particle {
     display: none;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE PERFORMANCE - CSS Animations (more GPU-friendly than JS)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* CSS rotation for proton rings on mobile */
+@keyframes rotate-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-counter-clockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.css-rotate {
+  animation: rotate-clockwise 12s linear infinite;
+}
+
+.css-rotate-reverse {
+  animation: rotate-counter-clockwise 9s linear infinite;
+}
+
+/* CSS orbital rotation for mobile */
+.css-orbit-cw {
+  animation: rotate-clockwise var(--orbit-duration, 20s) linear infinite;
+}
+
+.css-orbit-ccw {
+  animation: rotate-counter-clockwise var(--orbit-duration, 20s) linear infinite;
+}
+
+/* Static glow for protons on mobile (no JS animation) */
+.static-glow {
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.7), inset 0 0 4px rgba(255, 255, 255, 0.5);
+}
+
+/* Static glow for core center on mobile */
+.static-core-glow {
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+/* Static glow for electron cores on mobile */
+.static-electron-glow {
+  box-shadow: inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.25), 0 0 18px var(--glow-color, rgba(0, 212, 255, 0.4)), 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

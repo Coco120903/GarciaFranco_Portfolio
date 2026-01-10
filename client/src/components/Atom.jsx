@@ -8,6 +8,7 @@ const Atom = () => {
   const [activeParticle, setActiveParticle] = useState(null)
   const [isNearAtom, setIsNearAtom] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
   
   // Detect mobile device for performance optimization
   useEffect(() => {
@@ -19,6 +20,21 @@ const Atom = () => {
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
+  // Pause animations when off-screen for better performance
+  useEffect(() => {
+    if (!atomRef.current) return
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+    
+    observer.observe(atomRef.current)
+    return () => observer.disconnect()
   }, [])
 
   // Advanced spring physics for ultra-smooth motion - optimized for mobile
@@ -241,9 +257,9 @@ const Atom = () => {
     { rotateX: 45, rotateY: -60, rotateZ: 60, duration: 36, radius: 165, direction: 1, thickness: 1.3 }
   ]
 
-  // Floating particles for ambient effect - removed on mobile for performance
+  // Floating particles for ambient effect - reduced on mobile for performance
   const floatingParticles = useMemo(() => {
-    const count = isMobile ? 0 : 40
+    const count = isMobile ? 12 : 40
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       size: Math.random() * 3 + 1,
@@ -255,9 +271,9 @@ const Atom = () => {
     }))
   }, [isMobile])
 
-  // Energy beams from nucleus - removed on mobile for performance
+  // Energy beams from nucleus - reduced on mobile for performance
   const energyBeams = useMemo(() => {
-    const count = isMobile ? 0 : 12
+    const count = isMobile ? 6 : 12
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       angle: (i / count) * 360,
@@ -436,70 +452,74 @@ const Atom = () => {
             transformStyle: 'preserve-3d'
           }}
         >
-        {/* Outer aura glow */}
+        {/* Outer aura glow - simplified on mobile */}
         <motion.div
           className="atom-aura aura-outer"
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.15, 0.3, 0.15]
-          }}
+          animate={isVisible ? {
+            scale: isMobile ? [1, 1.05, 1] : [1, 1.08, 1],
+            opacity: isMobile ? [0.2, 0.25, 0.2] : [0.15, 0.3, 0.15]
+          } : {}}
           transition={{
-            duration: 5,
+            duration: isMobile ? 8 : 5,
             repeat: Infinity,
             ease: 'easeInOut'
           }}
         />
-        <motion.div
-          className="atom-aura aura-mid"
-          animate={{
-            scale: [1.05, 1.12, 1.05],
-            opacity: [0.2, 0.4, 0.2],
-            rotate: [0, 180, 360]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
-        />
-
-        {/* Complex Multi-Layer Nucleus */}
-        <div className="nucleus-container">
-          {/* Outer glow layers */}
+        {!isMobile && (
           <motion.div
-            className="nucleus-glow nucleus-glow-outer"
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.2, 0.5, 0.2],
+            className="atom-aura aura-mid"
+            animate={isVisible ? {
+              scale: [1.05, 1.12, 1.05],
+              opacity: [0.2, 0.4, 0.2],
               rotate: [0, 180, 360]
-            }}
+            } : {}}
             transition={{
               duration: 8,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
           />
+        )}
+
+        {/* Complex Multi-Layer Nucleus */}
+        <div className="nucleus-container">
+          {/* Outer glow layers - simplified on mobile */}
           <motion.div
-            className="nucleus-glow nucleus-glow-mid"
-            animate={{
-              scale: [1.1, 1.4, 1.1],
-              opacity: [0.3, 0.6, 0.3],
-              rotate: [0, -120, -240]
-            }}
+            className="nucleus-glow nucleus-glow-outer"
+            animate={isVisible ? {
+              scale: isMobile ? [1, 1.3, 1] : [1, 1.5, 1],
+              opacity: isMobile ? [0.3, 0.4, 0.3] : [0.2, 0.5, 0.2],
+              rotate: isMobile ? 0 : [0, 180, 360]
+            } : {}}
             transition={{
-              duration: 5,
+              duration: isMobile ? 10 : 8,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
           />
+          {!isMobile && (
+            <motion.div
+              className="nucleus-glow nucleus-glow-mid"
+              animate={isVisible ? {
+                scale: [1.1, 1.4, 1.1],
+                opacity: [0.3, 0.6, 0.3],
+                rotate: [0, -120, -240]
+              } : {}}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            />
+          )}
           <motion.div
             className="nucleus-glow nucleus-glow-inner"
-            animate={{
-              scale: [1, 1.25, 1],
-              opacity: [0.5, 0.9, 0.5]
-            }}
+            animate={isVisible ? {
+              scale: isMobile ? [1, 1.15, 1] : [1, 1.25, 1],
+              opacity: isMobile ? [0.6, 0.8, 0.6] : [0.5, 0.9, 0.5]
+            } : {}}
             transition={{
-              duration: 2.5,
+              duration: isMobile ? 4 : 2.5,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
@@ -507,27 +527,27 @@ const Atom = () => {
           
           {/* Nucleus core with orbiting particles */}
           <div className="nucleus-core">
-            {/* Outer proton ring */}
+            {/* Outer proton ring - use CSS animation on mobile for better performance */}
             <motion.div
-              className="proton-ring proton-ring-outer"
-              animate={{ rotate: 360 }}
+              className={`proton-ring proton-ring-outer ${isMobile ? 'css-rotate' : ''}`}
+              animate={!isMobile && isVisible ? { rotate: 360 } : {}}
               transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
             >
-              {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+              {(isMobile ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5, 6, 7]).map((i) => (
                 <motion.div
                   key={i}
-                  className="proton proton-outer"
+                  className={`proton proton-outer ${isMobile ? 'static-glow' : ''}`}
                   style={{
-                    transform: `rotate(${i * 45}deg) translateX(18px)`
+                    transform: `rotate(${i * (isMobile ? 90 : 45)}deg) translateX(18px)`
                   }}
-                  animate={{
+                  animate={!isMobile && isVisible ? {
                     scale: [0.9, 1.15, 0.9],
                     boxShadow: [
                       '0 0 6px rgba(0, 212, 255, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.3)',
                       '0 0 14px rgba(0, 212, 255, 1), inset 0 0 6px rgba(255, 255, 255, 0.7)',
                       '0 0 6px rgba(0, 212, 255, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.3)'
                     ]
-                  }}
+                  } : {}}
                   transition={{
                     duration: 1.8,
                     repeat: Infinity,
@@ -538,27 +558,27 @@ const Atom = () => {
               ))}
             </motion.div>
 
-            {/* Inner proton ring */}
+            {/* Inner proton ring - use CSS animation on mobile */}
             <motion.div
-              className="proton-ring proton-ring-inner"
-              animate={{ rotate: -360 }}
+              className={`proton-ring proton-ring-inner ${isMobile ? 'css-rotate-reverse' : ''}`}
+              animate={!isMobile && isVisible ? { rotate: -360 } : {}}
               transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
             >
-              {[0, 1, 2, 3, 4].map((i) => (
+              {(isMobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (
                 <motion.div
                   key={i}
-                  className="proton proton-inner"
+                  className={`proton proton-inner ${isMobile ? 'static-glow' : ''}`}
                   style={{
-                    transform: `rotate(${i * 72}deg) translateX(10px)`
+                    transform: `rotate(${i * (isMobile ? 120 : 72)}deg) translateX(10px)`
                   }}
-                  animate={{
+                  animate={!isMobile && isVisible ? {
                     scale: [1, 1.25, 1],
                     boxShadow: [
                       '0 0 8px rgba(0, 212, 255, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.4)',
                       '0 0 18px rgba(0, 212, 255, 1), inset 0 0 8px rgba(255, 255, 255, 0.8)',
                       '0 0 8px rgba(0, 212, 255, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.4)'
                     ]
-                  }}
+                  } : {}}
                   transition={{
                     duration: 1.4,
                     repeat: Infinity,
@@ -569,19 +589,19 @@ const Atom = () => {
               ))}
             </motion.div>
             
-            {/* Central core sphere */}
+            {/* Central core sphere - simplified box-shadow on mobile */}
             <motion.div
-              className="core-center"
-              animate={{
+              className={`core-center ${isMobile ? 'static-core-glow' : ''}`}
+              animate={!isMobile && isVisible ? {
                 boxShadow: [
                   '0 0 25px rgba(0, 212, 255, 0.7), 0 0 50px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.5)',
                   '0 0 40px rgba(0, 212, 255, 1), 0 0 80px rgba(0, 212, 255, 0.6), 0 0 120px rgba(0, 212, 255, 0.3), inset 0 0 25px rgba(255, 255, 255, 0.8)',
                   '0 0 25px rgba(0, 212, 255, 0.7), 0 0 50px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.5)'
                 ],
                 scale: [1, 1.08, 1]
-              }}
+              } : (isMobile && isVisible ? { scale: [1, 1.05, 1] } : {})}
               transition={{
-                duration: 3,
+                duration: isMobile ? 4 : 3,
                 repeat: Infinity,
                 ease: 'easeInOut'
               }}
@@ -591,17 +611,17 @@ const Atom = () => {
             </motion.div>
           </div>
 
-          {/* Pulse waves */}
-          {[1, 2].map((i) => (
+          {/* Pulse waves - reduced on mobile */}
+          {(isMobile ? [1] : [1, 2]).map((i) => (
             <motion.div
               key={i}
               className="nucleus-pulse"
-              animate={{
+              animate={isVisible ? {
                 scale: [1, 3, 1],
                 opacity: [0.4, 0, 0.4]
-              }}
+              } : {}}
               transition={{
-                duration: 4,
+                duration: isMobile ? 5 : 4,
                 repeat: Infinity,
                 delay: i * 1.2,
                 ease: 'easeOut'
@@ -623,13 +643,16 @@ const Atom = () => {
                 transformStyle: 'preserve-3d'
               }}
             >
-              {/* Rotating container */}
+              {/* Rotating container - use CSS animation on mobile for better performance */}
               <motion.div
-                className="orbital-plane"
-                style={{ transformStyle: 'preserve-3d' }}
-                animate={{
-                  rotateZ: [0, 360 * orbit.direction]
+                className={`orbital-plane ${isMobile ? (orbit.direction > 0 ? 'css-orbit-cw' : 'css-orbit-ccw') : ''}`}
+                style={{ 
+                  transformStyle: 'preserve-3d',
+                  '--orbit-duration': `${orbit.duration}s`
                 }}
+                animate={!isMobile && isVisible ? {
+                  rotateZ: [0, 360 * orbit.direction]
+                } : {}}
                 transition={{
                   duration: orbit.duration,
                   repeat: Infinity,
@@ -703,13 +726,16 @@ const Atom = () => {
                       onHoverStart={() => setActiveParticle(lang.name)}
                       onHoverEnd={() => setActiveParticle(null)}
                     >
-                      {/* Billboard effect */}
+                      {/* Billboard effect - use CSS animation on mobile */}
                       <motion.div
-                        className="electron-billboard"
-                        style={{ transformStyle: 'preserve-3d' }}
-                        animate={{
-                          rotateZ: [0, -360 * orbit.direction]
+                        className={`electron-billboard ${isMobile ? (orbit.direction > 0 ? 'css-orbit-ccw' : 'css-orbit-cw') : ''}`}
+                        style={{ 
+                          transformStyle: 'preserve-3d',
+                          '--orbit-duration': `${orbit.duration}s`
                         }}
+                        animate={!isMobile && isVisible ? {
+                          rotateZ: [0, -360 * orbit.direction]
+                        } : {}}
                         transition={{
                           duration: orbit.duration,
                           repeat: Infinity,
@@ -734,62 +760,67 @@ const Atom = () => {
                         >
                           <motion.div
                             className="electron"
-                            whileHover={{ scale: 1.25 }}
+                            whileHover={!isMobile ? { scale: 1.25 } : {}}
                             transition={{ type: 'spring', stiffness: 400, damping: 12 }}
                           >
-                            {/* Subtle outer glow - stays outside circle */}
-                            <motion.div
-                              className="electron-glow electron-glow-outer"
-                              style={{
-                                background: `radial-gradient(circle, ${lang.color}15 30%, transparent 70%)`
-                              }}
-                              animate={{
-                                scale: [1.2, 1.5, 1.2],
-                                opacity: [0.25, 0.45, 0.25]
-                              }}
-                              transition={{
-                                duration: 3.5,
-                                repeat: Infinity,
-                                delay: lang.delay,
-                                ease: 'easeInOut'
-                              }}
-                            />
-                            <motion.div
-                              className="electron-glow electron-glow-mid"
-                              style={{
-                                background: `radial-gradient(circle, ${lang.color}20 35%, transparent 60%)`
-                              }}
-                              animate={{
-                                scale: [1.15, 1.35, 1.15],
-                                opacity: [0.3, 0.5, 0.3]
-                              }}
-                              transition={{
-                                duration: 2.5,
-                                repeat: Infinity,
-                                delay: lang.delay + 0.2,
-                                ease: 'easeInOut'
-                              }}
-                            />
+                            {/* Subtle outer glow - hidden on mobile for performance */}
+                            {!isMobile && (
+                              <motion.div
+                                className="electron-glow electron-glow-outer"
+                                style={{
+                                  background: `radial-gradient(circle, ${lang.color}15 30%, transparent 70%)`
+                                }}
+                                animate={isVisible ? {
+                                  scale: [1.2, 1.5, 1.2],
+                                  opacity: [0.25, 0.45, 0.25]
+                                } : {}}
+                                transition={{
+                                  duration: 3.5,
+                                  repeat: Infinity,
+                                  delay: lang.delay,
+                                  ease: 'easeInOut'
+                                }}
+                              />
+                            )}
+                            {!isMobile && (
+                              <motion.div
+                                className="electron-glow electron-glow-mid"
+                                style={{
+                                  background: `radial-gradient(circle, ${lang.color}20 35%, transparent 60%)`
+                                }}
+                                animate={isVisible ? {
+                                  scale: [1.15, 1.35, 1.15],
+                                  opacity: [0.3, 0.5, 0.3]
+                                } : {}}
+                                transition={{
+                                  duration: 2.5,
+                                  repeat: Infinity,
+                                  delay: lang.delay + 0.2,
+                                  ease: 'easeInOut'
+                                }}
+                              />
+                            )}
+                            {/* Inner glow - simplified on mobile */}
                             <motion.div
                               className="electron-glow electron-glow-inner"
                               style={{
-                                background: `radial-gradient(circle, ${lang.color}30 40%, transparent 55%)`
+                                background: `radial-gradient(circle, ${lang.color}${isMobile ? '40' : '30'} 40%, transparent 55%)`
                               }}
-                              animate={{
-                                scale: [1.1, 1.2, 1.1],
-                                opacity: [0.35, 0.55, 0.35]
-                              }}
+                              animate={isVisible ? {
+                                scale: isMobile ? [1.1, 1.15, 1.1] : [1.1, 1.2, 1.1],
+                                opacity: isMobile ? [0.4, 0.5, 0.4] : [0.35, 0.55, 0.35]
+                              } : {}}
                               transition={{
-                                duration: 1.8,
+                                duration: isMobile ? 3 : 1.8,
                                 repeat: Infinity,
                                 delay: lang.delay + 0.4,
                                 ease: 'easeInOut'
                               }}
                             />
 
-                            {/* 3D Sphere core */}
+                            {/* 3D Sphere core - static box-shadow on mobile */}
                             <motion.div
-                              className="electron-core"
+                              className={`electron-core ${isMobile ? 'static-electron-glow' : ''}`}
                               style={{
                                 '--glow-color': lang.color,
                                 '--sphere-color': lang.color,
@@ -800,13 +831,13 @@ const Atom = () => {
                                 `,
                                 borderColor: lang.color,
                               }}
-                              animate={{
+                              animate={!isMobile && isVisible ? {
                                 boxShadow: [
                                   `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.2), 0 0 15px ${lang.color}35, 0 0 25px ${lang.color}18, 0 4px 12px rgba(0, 0, 0, 0.35)`,
                                   `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.28), 0 0 22px ${lang.color}45, 0 0 35px ${lang.color}25, 0 4px 12px rgba(0, 0, 0, 0.35)`,
                                   `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.2), 0 0 15px ${lang.color}35, 0 0 25px ${lang.color}18, 0 4px 12px rgba(0, 0, 0, 0.35)`
                                 ]
-                              }}
+                              } : {}}
                               transition={{
                                 duration: 3.5,
                                 repeat: Infinity,
@@ -822,22 +853,24 @@ const Atom = () => {
                               </div>
                             </motion.div>
 
-                            {/* Particle trail */}
-                            <motion.div
-                              className="electron-trail"
-                              style={{
-                                background: `linear-gradient(90deg, ${lang.color} 0%, ${lang.color}66 30%, transparent 100%)`
-                              }}
-                              animate={{
-                                opacity: [0.25, 0.65, 0.25],
-                                scaleX: [0.6, 1.1, 0.6]
-                              }}
-                              transition={{
-                                duration: 2.5,
-                                repeat: Infinity,
-                                ease: 'easeInOut'
-                              }}
-                            />
+                            {/* Particle trail - hidden on mobile */}
+                            {!isMobile && (
+                              <motion.div
+                                className="electron-trail"
+                                style={{
+                                  background: `linear-gradient(90deg, ${lang.color} 0%, ${lang.color}66 30%, transparent 100%)`
+                                }}
+                                animate={isVisible ? {
+                                  opacity: [0.25, 0.65, 0.25],
+                                  scaleX: [0.6, 1.1, 0.6]
+                                } : {}}
+                                transition={{
+                                  duration: 2.5,
+                                  repeat: Infinity,
+                                  ease: 'easeInOut'
+                                }}
+                              />
+                            )}
 
                             {/* Hover label */}
                             <AnimatePresence>
