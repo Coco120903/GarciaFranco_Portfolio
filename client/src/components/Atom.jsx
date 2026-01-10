@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import './atom.css'
 
 const Atom = () => {
@@ -7,11 +7,27 @@ const Atom = () => {
   const wrapperRef = useRef(null)
   const [activeParticle, setActiveParticle] = useState(null)
   const [isNearAtom, setIsNearAtom] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Detect mobile device for performance optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = window.innerWidth <= 768 || 
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      setIsMobile(isMobileDevice)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
-  // Advanced spring physics for ultra-smooth motion
+  // Advanced spring physics for ultra-smooth motion - optimized for mobile
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const springConfig = { stiffness: 80, damping: 25, mass: 0.8 }
+  // Less intensive spring config on mobile for better performance
+  const springConfig = isMobile 
+    ? { stiffness: 50, damping: 30, mass: 1.2 }
+    : { stiffness: 80, damping: 25, mass: 0.8 }
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), springConfig)
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springConfig)
 
@@ -225,9 +241,10 @@ const Atom = () => {
     { rotateX: 45, rotateY: -60, rotateZ: 60, duration: 36, radius: 165, direction: 1, thickness: 1.3 }
   ]
 
-  // Floating particles for ambient effect
-  const floatingParticles = useMemo(() => 
-    Array.from({ length: 40 }, (_, i) => ({
+  // Floating particles for ambient effect - reduced on mobile for performance
+  const floatingParticles = useMemo(() => {
+    const count = isMobile ? 12 : 40
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       size: Math.random() * 3 + 1,
       x: Math.random() * 100,
@@ -235,52 +252,69 @@ const Atom = () => {
       duration: Math.random() * 15 + 10,
       delay: Math.random() * 5,
       opacity: Math.random() * 0.4 + 0.1
-    })), []
-  )
+    }))
+  }, [isMobile])
 
-  // Energy beams from nucleus
-  const energyBeams = useMemo(() => 
-    Array.from({ length: 12 }, (_, i) => ({
+  // Energy beams from nucleus - reduced on mobile for performance
+  const energyBeams = useMemo(() => {
+    const count = isMobile ? 6 : 12
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
-      angle: (i / 12) * 360,
+      angle: (i / count) * 360,
       length: 60 + Math.random() * 50,
       duration: 2.5 + Math.random() * 2,
       delay: i * 0.25
-    })), []
-  )
+    }))
+  }, [isMobile])
 
-  const handleMouseMove = (e) => {
-    if (!atomRef.current || !wrapperRef.current) return
+  // Throttle mouse move for better performance
+  const mouseMoveTimeoutRef = useRef(null)
+  
+  const handleMouseMove = useCallback((e) => {
+    if (!atomRef.current || !wrapperRef.current || isMobile) return
     
-    const wrapperRect = wrapperRef.current.getBoundingClientRect()
-    const centerX = wrapperRect.left + wrapperRect.width / 2
-    const centerY = wrapperRect.top + wrapperRect.height / 2
-    
-    const distanceX = e.clientX - centerX
-    const distanceY = e.clientY - centerY
-    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-    
-    const proximityThreshold = 320
-    
-    if (distance < proximityThreshold) {
-      setIsNearAtom(true)
-      const x = (e.clientX - wrapperRect.left) / wrapperRect.width - 0.5
-      const y = (e.clientY - wrapperRect.top) / wrapperRect.height - 0.5
-      const proximityFactor = 1 - (distance / proximityThreshold)
-      mouseX.set(x * proximityFactor)
-      mouseY.set(y * proximityFactor)
-    } else {
-      setIsNearAtom(false)
-      mouseX.set(0)
-      mouseY.set(0)
+    // Throttle mouse move events for better performance
+    if (mouseMoveTimeoutRef.current) {
+      return
     }
-  }
+    
+    mouseMoveTimeoutRef.current = requestAnimationFrame(() => {
+      const wrapperRect = wrapperRef.current.getBoundingClientRect()
+      const centerX = wrapperRect.left + wrapperRect.width / 2
+      const centerY = wrapperRect.top + wrapperRect.height / 2
+      
+      const distanceX = e.clientX - centerX
+      const distanceY = e.clientY - centerY
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
+      
+      const proximityThreshold = 320
+      
+      if (distance < proximityThreshold) {
+        setIsNearAtom(true)
+        const x = (e.clientX - wrapperRect.left) / wrapperRect.width - 0.5
+        const y = (e.clientY - wrapperRect.top) / wrapperRect.height - 0.5
+        const proximityFactor = 1 - (distance / proximityThreshold)
+        mouseX.set(x * proximityFactor)
+        mouseY.set(y * proximityFactor)
+      } else {
+        setIsNearAtom(false)
+        mouseX.set(0)
+        mouseY.set(0)
+      }
+      
+      mouseMoveTimeoutRef.current = null
+    })
+  }, [isMobile, mouseX, mouseY])
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
+    if (mouseMoveTimeoutRef.current) {
+      cancelAnimationFrame(mouseMoveTimeoutRef.current)
+      mouseMoveTimeoutRef.current = null
+    }
     mouseX.set(0)
     mouseY.set(0)
     setIsNearAtom(false)
-  }
+  }, [mouseX, mouseY])
 
   return (
     <div
@@ -323,71 +357,76 @@ const Atom = () => {
 
       {/* Atom Container - Right Side */}
       <div className="atom-container">
-        {/* Ambient floating particles */}
-        <div className="ambient-particles">
-          {floatingParticles.map((particle) => (
+        {/* Ambient floating particles - only render if not too many for performance */}
+        {floatingParticles.length > 0 && (
+          <div className="ambient-particles">
+            {floatingParticles.map((particle) => (
+              <motion.div
+                key={particle.id}
+                className="ambient-particle"
+                style={{
+                  width: particle.size,
+                  height: particle.size,
+                  left: `${particle.x}%`,
+                  top: `${particle.y}%`,
+                }}
+                animate={{
+                  y: [0, -40, 0],
+                  x: [0, Math.random() * 30 - 15, 0],
+                  opacity: [particle.opacity, particle.opacity * 2.5, particle.opacity],
+                  scale: [1, 1.5, 1]
+                }}
+                transition={{
+                  duration: particle.duration,
+                  repeat: Infinity,
+                  delay: particle.delay,
+                  ease: 'easeInOut'
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Background energy grid - reduced on mobile for performance */}
+      {!isMobile && (
+        <div className="energy-grid">
+          {[...Array(8)].map((_, i) => (
             <motion.div
-              key={particle.id}
-              className="ambient-particle"
-              style={{
-                width: particle.size,
-                height: particle.size,
-                left: `${particle.x}%`,
-                top: `${particle.y}%`,
-              }}
+              key={i}
+              className="grid-line horizontal"
+              style={{ top: `${10 + i * 10}%` }}
               animate={{
-                y: [0, -40, 0],
-                x: [0, Math.random() * 30 - 15, 0],
-                opacity: [particle.opacity, particle.opacity * 2.5, particle.opacity],
-                scale: [1, 1.5, 1]
+                opacity: [0.02, 0.08, 0.02],
+                scaleX: [0.7, 1, 0.7]
               }}
               transition={{
-                duration: particle.duration,
+                duration: 5 + i * 0.5,
                 repeat: Infinity,
-                delay: particle.delay,
+                delay: i * 0.2,
                 ease: 'easeInOut'
               }}
             />
           ))}
-      </div>
-
-      {/* Background energy grid */}
-      <div className="energy-grid">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="grid-line horizontal"
-            style={{ top: `${10 + i * 10}%` }}
-            animate={{
-              opacity: [0.02, 0.08, 0.02],
-              scaleX: [0.7, 1, 0.7]
-            }}
-            transition={{
-              duration: 5 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.2,
-              ease: 'easeInOut'
-            }}
-          />
-        ))}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i + 8}
-            className="grid-line vertical"
-            style={{ left: `${10 + i * 10}%` }}
-            animate={{
-              opacity: [0.02, 0.08, 0.02],
-              scaleY: [0.7, 1, 0.7]
-            }}
-            transition={{
-              duration: 5 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.2,
-              ease: 'easeInOut'
-            }}
-          />
-        ))}
-      </div>
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i + 8}
+              className="grid-line vertical"
+              style={{ left: `${10 + i * 10}%` }}
+              animate={{
+                opacity: [0.02, 0.08, 0.02],
+                scaleY: [0.7, 1, 0.7]
+              }}
+              transition={{
+                duration: 5 + i * 0.5,
+                repeat: Infinity,
+                delay: i * 0.2,
+                ease: 'easeInOut'
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <motion.div
         ref={wrapperRef}

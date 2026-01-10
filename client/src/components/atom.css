@@ -146,6 +146,76 @@
   margin-top: -4.5rem;
 }
 
+/* Ambient floating particles */
+.ambient-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambient-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.6) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Background energy grid */
+.energy-grid {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  pointer-events: none;
+}
+
+.grid-line.horizontal {
+  width: 100%;
+  height: 1px;
+  left: 0;
+}
+
+.grid-line.vertical {
+  width: 1px;
+  height: 100%;
+  top: 0;
+}
+
+/* Energy field beams */
+.energy-field {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.energy-beam {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.8), transparent);
+  top: 50%;
+  left: 50%;
+  transform-origin: left center;
+  pointer-events: none;
+}
+
 /* Main Wrapper */
 .atom-wrapper {
   position: relative;
@@ -745,6 +815,36 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     contain: layout style paint;
+    /* Reduce animation complexity on mobile */
+    transform-style: preserve-3d;
+  }
+  
+  /* Optimize ambient particles for mobile */
+  .ambient-particles {
+    contain: layout style paint;
+  }
+  
+  .ambient-particle {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Optimize energy grid - hide on mobile */
+  .energy-grid {
+    display: none;
+  }
+  
+  /* Optimize energy beams */
+  .energy-field {
+    contain: layout style paint;
+  }
+  
+  .energy-beam {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .orbital-system,
@@ -891,6 +991,36 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     contain: layout style paint;
+    /* Reduce animation complexity on mobile */
+    transform-style: preserve-3d;
+  }
+  
+  /* Optimize ambient particles for mobile */
+  .ambient-particles {
+    contain: layout style paint;
+  }
+  
+  .ambient-particle {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Optimize energy grid - hide on mobile */
+  .energy-grid {
+    display: none;
+  }
+  
+  /* Optimize energy beams */
+  .energy-field {
+    contain: layout style paint;
+  }
+  
+  .energy-beam {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .orbital-system,
