@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import profileImage from '../assets/profile.png';
 import './HomeDim.css';
 
 const Home = ({ phase, tilt, setTilt }) => {
@@ -60,7 +61,7 @@ const Home = ({ phase, tilt, setTilt }) => {
         Franco.dev
       </motion.h1>
       <motion.img
-        src="/src/assets/profile.png"
+        src={profileImage}
         alt="Profile"
         className="profile-image"
         initial={{ opacity: 0, top: '100%', left: '50%', x: '-50%', y: '-50%' }}
