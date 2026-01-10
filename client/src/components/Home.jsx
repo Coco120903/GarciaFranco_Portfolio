@@ -60,7 +60,7 @@ const Home = ({ phase, tilt, setTilt }) => {
         Franco.dev
       </motion.h1>
       <motion.img
-        src="/src/assets/haloguy.png"
+        src="/src/assets/profile.png"
         alt="Profile"
         className="profile-image"
         initial={{ opacity: 0, top: '100%', left: '50%', x: '-50%', y: '-50%' }}
