@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect, lazy, Suspense } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Header from './components/Header.jsx'
 import Footer from './components/Footer.jsx'
 import Home from './components/Home.jsx'
@@ -200,6 +201,7 @@ function App() {
       </Suspense>
       
       <Footer />
+      <SpeedInsights />
     </div>
   )
 }
