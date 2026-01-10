@@ -1,0 +1,1067 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   3D ATOM COMPONENT - Advanced Visual Design
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Main Section - Flex container for list + atom */
+
+.atom-main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 6rem;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TECH LIST - Left side language list
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tech-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: none;
+  backdrop-filter: none;
+  min-width: 520px;
+  /* allow container to expand to fit items */
+  max-width: 1200px;
+  width: 100%;
+}
+
+.tech-list-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.5rem 0;
+  padding-bottom: 1.25rem;
+  /* border-bottom: 1px solid rgba(0, 212, 255, 0.2); */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.tech-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.7rem;
+  row-gap: 3.5rem;
+}
+
+.tech-list-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  aspect-ratio: unset;
+  min-width: 120px;
+  min-height: 150px;
+  max-width: 160px;
+  max-height: 200px;
+  height: 170px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-list-item:hover,
+.tech-list-item.active {
+  background: rgba(var(--item-color-rgb, 0, 212, 255), 0.1);
+  border-color: var(--item-color, rgba(0, 212, 255, 0.3));
+  transform: translateY(-3px);
+}
+
+.tech-list-item.active {
+  box-shadow: 0 0 15px rgba(var(--item-color-rgb, 0, 212, 255), 0.2);
+}
+
+.tech-list-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tech-list-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tech-list-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.tech-list-indicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tech-list-item:hover .tech-list-indicator,
+.tech-list-item.active .tech-list-indicator {
+  opacity: 1;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ATOM CONTAINER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Container */
+.atom-container {
+  position: relative;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  perspective: 2500px;
+  margin-top: -4.5rem;
+}
+
+/* Main Wrapper */
+.atom-wrapper {
+  position: relative;
+  width: 450px;
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NUCLEUS - Core of the atom
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nucleus-container {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transform-style: preserve-3d;
+}
+
+/* Outer ambient glow */
+.nucleus-glow {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.2) 0%,
+    rgba(0, 180, 255, 0.08) 40%,
+    transparent 70%
+  );
+  filter: blur(5px);
+  animation: nucleusGlowPulse 3s ease-in-out infinite;
+}
+
+@keyframes nucleusGlowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.08); opacity: 0.7; }
+}
+
+/* Inner glow layer */
+.nucleus-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(0, 212, 255, 0.2) 40%,
+    transparent 70%
+  );
+  filter: blur(3px);
+}
+
+.nucleus-core {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+/* Protons - orbiting particles */
+.proton {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #7aeeff, #00d4ff, #0099cc);
+  box-shadow: 
+    0 0 6px rgba(0, 212, 255, 0.6),
+    0 0 12px rgba(0, 212, 255, 0.3),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.3),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Central neutron - main core sphere */
+.neutron {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(180, 240, 255, 1) 20%,
+    rgba(0, 212, 255, 1) 50%,
+    rgba(0, 160, 200, 1) 80%,
+    rgba(0, 120, 160, 1) 100%
+  );
+  border: 1.5px solid rgba(120, 230, 255, 0.9);
+  z-index: 10;
+  box-shadow:
+    0 0 10px rgba(0, 212, 255, 0.5),
+    0 0 20px rgba(0, 212, 255, 0.2),
+    inset -2px -2px 6px rgba(0, 80, 120, 0.4),
+    inset 2px 2px 5px rgba(255, 255, 255, 0.6);
+}
+
+/* Neutron specular highlight */
+.neutron::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 40%;
+  height: 30%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  transform: rotate(-20deg);
+}
+
+/* Energy ring around neutron */
+.neutron::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  animation: energyRingSpin 4s linear infinite;
+}
+
+@keyframes energyRingSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Pulse rings emanating from nucleus */
+.nucleus-pulse {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  pointer-events: none;
+  box-shadow: 
+    0 0 4px rgba(0, 212, 255, 0.25),
+    inset 0 0 4px rgba(0, 212, 255, 0.1);
+}
+
+/* Multiple glow layers for depth */
+.nucleus-glow-outer {
+  width: 65px;
+  height: 65px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 180, 255, 0.08) 0%,
+    rgba(0, 150, 200, 0.03) 50%,
+    transparent 70%
+  );
+  filter: blur(6px);
+}
+
+.nucleus-glow-mid {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 212, 255, 0.15) 0%,
+    rgba(0, 180, 255, 0.06) 50%,
+    transparent 70%
+  );
+  filter: blur(4px);
+}
+
+.nucleus-glow-inner {
+  width: 38px;
+  height: 38px;
+  background: radial-gradient(
+    circle,
+    rgba(100, 220, 255, 0.25) 0%,
+    rgba(0, 212, 255, 0.1) 40%,
+    transparent 70%
+  );
+  filter: blur(3px);
+}
+
+/* Proton ring containers */
+.proton-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proton-ring-outer {
+  width: 35px;
+  height: 35px;
+}
+
+.proton-ring-inner {
+  width: 20px;
+  height: 20px;
+}
+
+/* Enhanced proton particles */
+.proton-outer {
+  width: 7px;
+  height: 7px;
+  background: radial-gradient(circle at 30% 30%, #a0f0ff, #00d4ff, #0088aa);
+}
+
+.proton-inner {
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle at 30% 30%, #c0f8ff, #40e0ff, #00aacc);
+}
+
+/* Central core sphere - main visual element */
+.core-center {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(200, 250, 255, 1) 15%,
+    rgba(100, 230, 255, 1) 35%,
+    rgba(0, 212, 255, 1) 55%,
+    rgba(0, 160, 200, 1) 75%,
+    rgba(0, 120, 160, 1) 100%
+  );
+  border: 1.5px solid rgba(150, 240, 255, 0.9);
+  z-index: 20;
+}
+
+/* Core inner highlight - specular reflection */
+.core-highlight {
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 45%;
+  height: 35%;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  transform: rotate(-25deg);
+}
+
+/* Core bottom reflection */
+.core-center::after {
+  content: '';
+  position: absolute;
+  bottom: 8%;
+  right: 15%;
+  width: 25%;
+  height: 18%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.5) 0%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  transform: rotate(20deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ORBITAL SYSTEMS - Unified ring + particles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.orbital-system {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.orbital-plane {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.orbit-ring-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.orbit-ring-svg circle {
+  stroke-linecap: round;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ELECTRONS - Tech particles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.electron-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left: -60px;
+  width: 120px;
+  height: 120px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  pointer-events: auto;
+  overflow: visible;
+}
+
+.electron-container.active {
+  z-index: 200;
+}
+
+/* Billboard wrapper - counter-rotates to face viewer */
+.electron-billboard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  overflow: visible;
+}
+
+.electron {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  overflow: visible;
+}
+
+.electron-glow-outer {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(8px);
+  opacity: 0.5;
+}
+
+.electron-core {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  /* Enhanced 3D sphere effect */
+  box-shadow: 
+    /* Inner shadow for depth */
+    inset -6px -6px 15px rgba(0, 0, 0, 0.5),
+    inset 4px 4px 10px rgba(255, 255, 255, 0.2),
+    /* Outer glow - reduced */
+    0 0 12px var(--glow-color, rgba(0, 212, 255, 0.4)),
+    0 0 20px var(--glow-color, rgba(0, 212, 255, 0.2)),
+    /* 3D depth shadow */
+    3px 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Main specular highlight - top left */
+.electron-core::before {
+  content: '';
+  position: absolute;
+  top: 6%;
+  left: 12%;
+  width: 40%;
+  height: 35%;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.4) 30%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+  transform: rotate(-25deg);
+}
+
+/* Secondary reflection - bottom right */
+.electron-core::after {
+  content: '';
+  position: absolute;
+  bottom: 8%;
+  right: 10%;
+  width: 30%;
+  height: 20%;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 50%,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+  transform: rotate(15deg);
+}
+
+.electron-container:hover .electron-core {
+  transform: scale(1.15);
+}
+
+.icon-wrapper {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.tech-icon {
+  width: 100%;
+  height: 100%;
+  filter: 
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 5px currentColor)
+    drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARTICLE LABELS - Hover tooltips
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.particle-label {
+  position: absolute;
+  bottom: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 10, 20, 0.95);
+  border: 1px solid;
+  padding: 0.55rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 0.08em;
+  font-family: 'Orbitron', 'Courier New', monospace;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TITLE SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.atom-title {
+  text-align: center;
+  margin-top: 3rem;
+  z-index: 10;
+}
+
+.atom-main-title {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  color: rgba(0, 212, 255, 0.95);
+  font-weight: 700;
+  margin: 0;
+}
+
+.atom-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.12em;
+  margin-top: 0.6rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+
+  .tech-list-container {
+    min-width: 0;
+    width: 100%;
+    max-width: 100vw;
+    padding: 0.5rem;
+  }
+  .tech-list-item {
+    min-width: 90px;
+    min-height: 90px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .tech-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .tech-list-title {
+    text-align: center;
+  }
+
+  .atom-wrapper {
+    width: 450px;
+    height: 450px;
+    transform: scale(0.80);
+    transform-origin: center center;
+  }
+
+  .glow-ring.ring-1 { width: 320px; height: 320px; }
+  .glow-ring.ring-2 { width: 360px; height: 360px; }
+  .glow-ring.ring-3 { width: 400px; height: 400px; }
+
+  .electron-core {
+    width: 55px;
+    height: 55px;
+  }
+
+  .electron-container {
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+  }
+
+  .icon-wrapper {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .atom-main-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+ 
+  .tech-list-container {
+    order: 1;
+    width: 100%;
+  }
+ 
+  .atom-container {
+    order: 2;
+  }
+
+  /* Performance optimizations for mobile scrolling */
+  .atom-wrapper {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout style paint;
+  }
+
+  .orbital-system,
+  .orbital-plane,
+  .orbital-path {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .proton-ring,
+  .proton-ring-outer,
+  .proton-ring-inner {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .proton,
+  .electron-container,
+  .nucleus-core {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .nucleus-pulse {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .tech-list-container {
+    padding: 1.5rem 0.8rem;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  .tech-list-item {
+    min-width: 60px;
+    min-height: 60px;
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  .tech-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .atom-container {
+    min-height: 450px;
+    padding: 3rem 0;
+  }
+
+  .atom-wrapper {
+    width: 450px;
+    height: 450px;
+    transform: scale(0.68);
+    transform-origin: center center;
+  }
+
+  .glow-ring.ring-1 { width: 320px; height: 320px; }
+  .glow-ring.ring-2 { width: 360px; height: 360px; }
+  .glow-ring.ring-3 { width: 400px; height: 400px; }
+
+  .nucleus-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .nucleus-glow {
+    width: 90px;
+    height: 90px;
+  }
+
+  .nucleus-core {
+    width: 40px;
+    height: 40px;
+  }
+
+  .proton {
+    width: 11px;
+    height: 11px;
+  }
+
+  .neutron {
+    width: 18px;
+    height: 18px;
+  }
+
+  .electron-core {
+    width: 48px;
+    height: 48px;
+  }
+
+  .electron-container {
+    width: 52px;
+    height: 52px;
+    margin-top: -26px;
+    margin-left: -26px;
+  }
+
+  .icon-wrapper {
+    width: 24px;
+    height: 24px;
+  }
+
+  .atom-main-title {
+    font-size: 1rem;
+  }
+
+  .particle-label {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.9rem;
+    bottom: -40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .atom-main-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .tech-list-container {
+    order: 1;
+    width: 100%;
+  }
+
+  .tech-list-container {
+    padding: 1.2rem 0.6rem;
+  }
+
+  /* Performance optimizations for mobile scrolling */
+  .atom-wrapper {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout style paint;
+  }
+
+  .orbital-system,
+  .orbital-plane,
+  .orbital-path {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .proton-ring,
+  .proton-ring-outer,
+  .proton-ring-inner {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .proton,
+  .electron-container,
+  .nucleus-core {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .nucleus-pulse {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .tech-list {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+    width: 100%;
+  }
+
+  .tech-list-item {
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 60px;
+    max-height: 80px;
+    width: 100%;
+    max-width: none;
+    flex: 1;
+  }
+
+  .atom-container {
+    order: 2;
+  }
+
+  .atom-container {
+    min-height: 400px;
+    padding: 2rem 0;
+  }
+
+  .atom-wrapper {
+    width: 450px;
+    height: 450px;
+    transform: scale(0.58);
+    transform-origin: center center;
+  }
+
+  .glow-ring.ring-1 { width: 240px; height: 240px; }
+  .glow-ring.ring-2 { width: 265px; height: 265px; }
+  .glow-ring.ring-3 { width: 290px; height: 290px; }
+
+  .nucleus-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .nucleus-glow {
+    width: 70px;
+    height: 70px;
+  }
+
+  .nucleus-core {
+    width: 35px;
+    height: 35px;
+  }
+
+  .proton {
+    width: 9px;
+    height: 9px;
+  }
+
+  .neutron {
+    width: 15px;
+    height: 15px;
+  }
+
+  .electron-core {
+    width: 42px;
+    height: 42px;
+    border-width: 1.5px;
+  }
+
+  .electron-container {
+    width: 46px;
+    height: 46px;
+    margin-top: -23px;
+    margin-left: -23px;
+  }
+
+  .icon-wrapper {
+    width: 20px;
+    height: 20px;
+  }
+
+  .electron-trail {
+    width: 40px;
+    height: 3px;
+  }
+
+  .atom-main-title {
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+  }
+
+  .atom-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .particle-label {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.7rem;
+    bottom: -35px;
+  }
+
+  .atom-title {
+    margin-top: 2rem;
+  }
+
+  .energy-particle {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@supports (transform: translate3d(0, 0, 0)) {
+  .atom-wrapper,
+  .orbital-plane,
+  .orbital-path,
+  .electron-container,
+  .electron,
+  .electron-core,
+  .nucleus-container {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .atom-wrapper,
+  .orbital-plane,
+  .electron-container,
+  .nucleus-pulse,
+  .glow-ring,
+  .energy-particle {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+

@@ -1,0 +1,1224 @@
+.about-section-shadow-separator {
+  width: 100%;
+  height: 18px;
+  margin: 2.5rem 0 2.5rem 0;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+  border-radius: 12px;
+  background: transparent;
+}
+/* About section styling */
+.section-two {
+  min-height: 85vh;
+  width: 100%;
+  padding: 0.5rem 0 2rem 0;
+  background-color: #000000;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+/* Gradient separator between sections using opacity */
+.section-two::before {
+  content: '';
+  position: absolute;
+  top: -100vh;
+  left: 0;
+  width: 100%;
+  height: 200vh;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 35%,
+    rgba(0, 0, 0, 0.6) 48%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.6) 52%,
+    rgba(0, 0, 0, 0.3) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* Cinematic background animation for section two */
+.section-two::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(5, 15, 35, 0.3) 25%,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 10, 20, 0.2) 75%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 50s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-inner {
+  position: relative;
+  z-index: 12;
+  width: 100%;
+  padding: 5rem 14% 3rem 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about-header {
+  max-width: 1300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.about-eyebrow {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #f8f9fb;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  margin-bottom: 0.2rem;
+}
+
+.about-title {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: #f8f9fb;
+}
+
+.about-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 1200px;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.tag {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.86);
+  background: linear-gradient(120deg, rgba(0, 212, 255, 0.14), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(4px);
+}
+
+.about-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,255,0.25), rgba(0,0,0,0));
+  opacity: 0.8;
+  margin: 2.8rem 0 2.8rem 0;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.about-card {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: none;
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.card-label {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.card-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.8rem 1rem;
+}
+
+.stat {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.stat-value {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: #f8f9fb;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+}
+
+.about-footnote {
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+  max-width: 1300px;
+  line-height: 1.6;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKILLS SECTION (ABOUT PAGE)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.skills-section-about {
+  display: grid;
+  /* Left column fixed to match creative tools width, right column fills remaining space
+     This ensures the Core Competencies block never overflows the site's padded area. */
+  grid-template-columns: minmax(0, 360px) 1fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: start;
+}
+
+/* Block Headers */
+.block-header-about {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  position: relative;
+}
+
+.block-header-about h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.tech-skills-block-about,
+.creative-tools-block-about,
+.soft-skills-block-about {
+  padding: 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: none;
+}
+
+/* Make tech skills span full width */
+.tech-skills-block-about {
+  grid-column: 1 / -1;
+  margin-bottom: 8rem;
+}
+
+/* Make Atom span the full width of the skills grid so the tech list can use its intended width */
+.atom-full-row {
+  grid-column: 1 / -1;
+}
+
+/* Place Creative Tools left of Core Competencies on the same row
+   and reduce the visual width of the Core Competencies container. */
+.creative-tools-block-about {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  max-width: 360px; /* enforced column width */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Match Core Competencies height */
+.creative-tools-block-about {
+  height: 491.06px;
+}
+
+.soft-skills-block-about {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  max-width: none;
+  width: 100%;
+  justify-self: stretch;
+  align-self: start;
+  box-sizing: border-box;
+}
+
+/* Narrow the Creative Tools block so Core Competencies fits inside site padding */
+.creative-tools-block-about {
+  max-width: 360px;
+  width: 100%;
+  justify-self: start;
+  align-self: start;
+}
+
+@media (max-width: 900px) {
+  /* Stack on smaller screens to avoid overflow */
+  .creative-tools-block-about,
+  .soft-skills-block-about {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Technical Skills Tag Grid */
+.tech-tags-grid-about {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+/* Caption under Technical Skills to indicate limited experience */
+.tech-skill-caption {
+  margin: 0 0 1rem 0;
+  color: rgba(255,255,255,0.78);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Slightly dim the tech tags to communicate "some experience" */
+.tech-skills-block-about .tech-tag-about {
+  opacity: 0.88;
+  transform: scale(0.99);
+}
+.tech-skills-block-about .tag-dot-about {
+  box-shadow: 0 0 6px color-mix(in srgb, var(--tag-color) 30%, transparent);
+  width: 9px;
+  height: 9px;
+}
+
+.tech-tag-about {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  cursor: default;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: fit-content;
+  justify-content: center;
+}
+
+.tech-tag-about::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--tag-color) 15%, transparent) 0%, 
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tech-tag-about:hover::before {
+  opacity: 1;
+}
+
+.tech-tag-about:hover {
+  border-color: var(--tag-color, rgba(0, 212, 255, 0.4));
+  box-shadow: 0 5px 20px color-mix(in srgb, var(--tag-color) 20%, transparent);
+}
+
+.tag-dot-about {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tag-color, #00d4ff);
+  box-shadow: 0 0 10px var(--tag-color, rgba(0, 212, 255, 0.5));
+  flex-shrink: 0;
+}
+
+.tag-name-about {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Tooltip-style contextual note for each tech tag (no ratings/graphs) */
+.tag-note-about {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: rgba(0,0,0,0.75);
+  color: rgba(255,255,255,0.9);
+  padding: 0.35rem 0.55rem;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+  z-index: 30;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.tech-tag-about:hover .tag-note-about {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Soft Skills Grid */
+.soft-grid-about {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.soft-card-about {
+  position: relative;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: default;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.3s ease;
+}
+
+.soft-card-about:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.soft-card-bg-about {
+  display: none;
+}
+
+.soft-card-border-about {
+  display: none;
+}
+
+.soft-icon-wrap-about {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.soft-card-about:hover .soft-icon-wrap-about {
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.soft-icon-about {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.soft-card-about h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+.soft-card-about p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Lucid icons for soft skills */
+.soft-icon-about[data-icon="puzzle"]::before { 
+  content: '◇'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="team"]::before { 
+  content: '∴'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="camera"]::before { 
+  content: '◯'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="share"]::before { 
+  content: '→'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="palette"]::before { 
+  content: '●'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="clock"]::before { 
+  content: '◆'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+
+@media (max-width: 1400px) {
+  .about-inner {
+    padding: 3rem 12% 2.5rem 10%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-inner {
+    padding: 3rem 11% 2.5rem 8%;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+}
+
+
+.about-section-shadow-separator {
+  width: 100%;
+  height: 18px;
+  margin: 2.5rem 0 2.5rem 0;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+  border-radius: 12px;
+  background: transparent;
+}
+/* About section styling */
+.section-two {
+  min-height: 85vh;
+  width: 100%;
+  padding: 0.5rem 0 2rem 0;
+  background-color: #000000;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scroll-snap-margin-top: 0;
+  scroll-margin-top: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+  will-change: scroll-position;
+}
+
+/* Gradient separator between sections using opacity */
+.section-two::before {
+  content: '';
+  position: absolute;
+  top: -100vh;
+  left: 0;
+  width: 100%;
+  height: 200vh;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 35%,
+    rgba(0, 0, 0, 0.6) 48%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.6) 52%,
+    rgba(0, 0, 0, 0.3) 65%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* Cinematic background animation for section two */
+.section-two::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(5, 15, 35, 0.3) 25%,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 10, 20, 0.2) 75%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 50s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-inner {
+  position: relative;
+  z-index: 12;
+  width: 100%;
+  padding: 5rem 14% 8rem 12%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.about-header {
+  max-width: 1300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.about-eyebrow {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #f8f9fb;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  margin-bottom: 0.2rem;
+}
+
+.about-title {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: #f8f9fb;
+}
+
+.about-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 1200px;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.tag {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.86);
+  background: linear-gradient(120deg, rgba(0, 212, 255, 0.14), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(4px);
+}
+
+.about-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0,0,0,0), rgba(255,255,255,0.25), rgba(0,0,0,0));
+  opacity: 0.8;
+  margin: 2.8rem 0 2.8rem 0;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.about-card {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: none;
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.card-label {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.card-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.8rem 1rem;
+}
+
+.stat {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.stat-value {
+  font-family: 'Akira Expanded', 'Anton', 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: #f8f9fb;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+}
+
+.about-footnote {
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+  max-width: 1300px;
+  line-height: 1.6;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKILLS SECTION (ABOUT PAGE)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.skills-section-about {
+  display: grid;
+  /* Left column fixed to match creative tools width, right column fills remaining space
+     This ensures the Core Competencies block never overflows the site's padded area. */
+  grid-template-columns: minmax(0, 360px) 1fr;
+  gap: 2rem;
+  width: 100%;
+  align-items: start;
+}
+
+/* Block Headers */
+.block-header-about {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  position: relative;
+}
+
+.block-header-about h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.tech-skills-block-about,
+.creative-tools-block-about,
+.soft-skills-block-about {
+  padding: 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: none;
+}
+
+/* Make tech skills span full width */
+.tech-skills-block-about {
+  grid-column: 1 / -1;
+  margin-bottom: 8rem;
+}
+
+/* Make Atom span the full width of the skills grid so the tech list can use its intended width */
+.atom-full-row {
+  grid-column: 1 / -1;
+}
+
+/* Place Creative Tools left of Core Competencies on the same row
+   and reduce the visual width of the Core Competencies container. */
+.creative-tools-block-about {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  max-width: 360px; /* enforced column width */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Match Core Competencies height */
+.creative-tools-block-about {
+  height: 491.06px;
+}
+
+.soft-skills-block-about {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  max-width: none;
+  width: 100%;
+  justify-self: stretch;
+  align-self: start;
+  box-sizing: border-box;
+}
+
+/* Narrow the Creative Tools block so Core Competencies fits inside site padding */
+.creative-tools-block-about {
+  max-width: 360px;
+  width: 100%;
+  justify-self: start;
+  align-self: start;
+}
+
+@media (max-width: 900px) {
+  /* Stack on smaller screens to avoid overflow */
+  .creative-tools-block-about,
+  .soft-skills-block-about {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Technical Skills Tag Grid */
+.tech-tags-grid-about {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+/* Caption under Technical Skills to indicate limited experience */
+.tech-skill-caption {
+  margin: 0 0 1rem 0;
+  color: rgba(255,255,255,0.78);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Slightly dim the tech tags to communicate "some experience" */
+.tech-skills-block-about .tech-tag-about {
+  opacity: 0.88;
+  transform: scale(0.99);
+}
+.tech-skills-block-about .tag-dot-about {
+  box-shadow: 0 0 6px color-mix(in srgb, var(--tag-color) 30%, transparent);
+  width: 9px;
+  height: 9px;
+}
+
+.tech-tag-about {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  cursor: default;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: fit-content;
+  justify-content: center;
+}
+
+.tech-tag-about::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--tag-color) 15%, transparent) 0%, 
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tech-tag-about:hover::before {
+  opacity: 1;
+}
+
+.tech-tag-about:hover {
+  border-color: var(--tag-color, rgba(0, 212, 255, 0.4));
+  box-shadow: 0 5px 20px color-mix(in srgb, var(--tag-color) 20%, transparent);
+}
+
+.tag-dot-about {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tag-color, #00d4ff);
+  box-shadow: 0 0 10px var(--tag-color, rgba(0, 212, 255, 0.5));
+  flex-shrink: 0;
+}
+
+.tag-name-about {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Tooltip-style contextual note for each tech tag (no ratings/graphs) */
+.tag-note-about {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: rgba(0,0,0,0.75);
+  color: rgba(255,255,255,0.9);
+  padding: 0.35rem 0.55rem;
+  font-size: 0.75rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+  z-index: 30;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+.tech-tag-about:hover .tag-note-about {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Soft Skills Grid */
+.soft-grid-about {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.soft-card-about {
+  position: relative;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: default;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.3s ease;
+}
+
+.soft-card-about:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+.soft-card-bg-about {
+  display: none;
+}
+
+.soft-card-border-about {
+  display: none;
+}
+
+.soft-icon-wrap-about {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.soft-card-about:hover .soft-icon-wrap-about {
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.soft-icon-about {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.soft-card-about h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+.soft-card-about p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Lucid icons for soft skills */
+.soft-icon-about[data-icon="puzzle"]::before { 
+  content: '◇'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="team"]::before { 
+  content: '∴'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="camera"]::before { 
+  content: '◯'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="share"]::before { 
+  content: '→'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="palette"]::before { 
+  content: '●'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+.soft-icon-about[data-icon="clock"]::before { 
+  content: '◆'; 
+  font-size: 2.5rem;
+  color: rgba(0, 212, 255, 0.8);
+}
+
+@media (max-width: 1400px) {
+  .about-inner {
+    padding: 3rem 12% 2.5rem 10%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .about-inner {
+    padding: 3rem 11% 2.5rem 8%;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-two {
+    padding: 3rem 1rem;
+  }
+
+  .about-inner {
+    padding: 0;
+  }
+
+  .soft-card-about h4 {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .soft-card-about {
+    padding: 1rem 0.6rem;
+  }
+}
+
+/* Mobile optimization for soft skills card text */
+@media (max-width: 768px) {
+  .soft-card-about h4 {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .soft-card-about {
+    padding: 1.2rem 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .soft-card-about h4 {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .soft-card-about {
+    padding: 1rem 0.6rem;
+  }
+}
+
+/* About Buttons */
+.about-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.about-btn {
+  padding: 0.85rem 2rem;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 180, 220, 0.15));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Montserrat', 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+}
+
+.about-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.about-btn:hover::before {
+  left: 100%;
+}
+
+.about-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 180, 220, 0.25));
+  border-color: rgba(0, 212, 255, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+}
+
+.about-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.25);
+}
+
+.about-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+}
+
+
+
+
+
+
+
