@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactDOM from 'react-dom'
 import emailjs from '@emailjs/browser'
-import './connect.css'
+import './Connect.css'
 
 const ConfirmationModal = ({ isOpen, onConfirm, onCancel, label, href }) => {
   useEffect(() => {
