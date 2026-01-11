@@ -1,10 +1,11 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion'
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import './atom.css'
 
 const Atom = () => {
   const atomRef = useRef(null)
   const wrapperRef = useRef(null)
+  const [activeParticle, setActiveParticle] = useState(null)
   const [isNearAtom, setIsNearAtom] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
@@ -353,14 +354,14 @@ const Atom = () => {
                 {lang.icon}
               </span>
               <span className="tech-list-name">{lang.name}</span>
-              <span className="tech-list-indicator" style={{ background: lang.color, opacity: 0.35 }} />
+              <span className="tech-list-indicator" style={{ background: lang.color }} />
             </motion.li>
           ))}
         </ul>
       </motion.div>
 
       {/* Atom Container - Right Side */}
-        <div className={`atom-container ${isVisible ? '' : 'atom-paused'}`}>
+      <div className="atom-container">
         {/* Ambient floating particles removed for performance */}
 
         {/* Background energy grid - reduced on mobile for performance */}
@@ -476,46 +477,104 @@ const Atom = () => {
           {/* Nucleus core with orbiting particles */}
           <div className="nucleus-core">
             {/* Outer proton ring - use CSS animation on mobile for better performance */}
-            <div className="proton-ring proton-ring-outer css-rotate">
+            <motion.div
+              className={`proton-ring proton-ring-outer ${isMobile ? 'css-rotate' : ''}`}
+              animate={!isMobile && isVisible ? { rotate: 360 } : {}}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+            >
               {(isMobile ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5, 6, 7]).map((i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="proton proton-outer static-glow"
+                  className={`proton proton-outer ${isMobile ? 'static-glow' : ''}`}
                   style={{
-                    transform: `rotate(${i * (isMobile ? 90 : 45)}deg) translateX(18px)`,
-                    '--p-delay': `${i * 0.15}s`,
+                    transform: `rotate(${i * (isMobile ? 90 : 45)}deg) translateX(18px)`
+                  }}
+                  animate={!isMobile && isVisible ? {
+                    scale: [0.9, 1.15, 0.9],
+                    boxShadow: [
+                      '0 0 6px rgba(0, 212, 255, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.3)',
+                      '0 0 14px rgba(0, 212, 255, 1), inset 0 0 6px rgba(255, 255, 255, 0.7)',
+                      '0 0 6px rgba(0, 212, 255, 0.5), inset 0 0 3px rgba(255, 255, 255, 0.3)'
+                    ]
+                  } : {}}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                    delay: i * 0.15,
+                    ease: 'easeInOut'
                   }}
                 />
               ))}
-            </div>
+            </motion.div>
 
             {/* Inner proton ring - use CSS animation on mobile */}
-            <div className="proton-ring proton-ring-inner css-rotate-reverse">
+            <motion.div
+              className={`proton-ring proton-ring-inner ${isMobile ? 'css-rotate-reverse' : ''}`}
+              animate={!isMobile && isVisible ? { rotate: -360 } : {}}
+              transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
+            >
               {(isMobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (
-                <div
+                <motion.div
                   key={i}
-                  className="proton proton-inner static-glow"
+                  className={`proton proton-inner ${isMobile ? 'static-glow' : ''}`}
                   style={{
-                    transform: `rotate(${i * (isMobile ? 120 : 72)}deg) translateX(10px)`,
-                    '--p-delay': `${i * 0.2}s`,
+                    transform: `rotate(${i * (isMobile ? 120 : 72)}deg) translateX(10px)`
+                  }}
+                  animate={!isMobile && isVisible ? {
+                    scale: [1, 1.25, 1],
+                    boxShadow: [
+                      '0 0 8px rgba(0, 212, 255, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.4)',
+                      '0 0 18px rgba(0, 212, 255, 1), inset 0 0 8px rgba(255, 255, 255, 0.8)',
+                      '0 0 8px rgba(0, 212, 255, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.4)'
+                    ]
+                  } : {}}
+                  transition={{
+                    duration: 1.4,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                    ease: 'easeInOut'
                   }}
                 />
               ))}
-            </div>
+            </motion.div>
             
             {/* Central core sphere - simplified box-shadow on mobile */}
-            <div className="core-center static-core-glow">
+            <motion.div
+              className={`core-center ${isMobile ? 'static-core-glow' : ''}`}
+              animate={!isMobile && isVisible ? {
+                boxShadow: [
+                  '0 0 25px rgba(0, 212, 255, 0.7), 0 0 50px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.5)',
+                  '0 0 40px rgba(0, 212, 255, 1), 0 0 80px rgba(0, 212, 255, 0.6), 0 0 120px rgba(0, 212, 255, 0.3), inset 0 0 25px rgba(255, 255, 255, 0.8)',
+                  '0 0 25px rgba(0, 212, 255, 0.7), 0 0 50px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.5)'
+                ],
+                scale: [1, 1.08, 1]
+              } : (isMobile && isVisible ? { scale: [1, 1.05, 1] } : {})}
+              transition={{
+                duration: isMobile ? 4 : 3,
+                repeat: Infinity,
+                ease: 'easeInOut'
+              }}
+            >
               {/* Core inner highlight */}
               <div className="core-highlight" />
-            </div>
+            </motion.div>
           </div>
 
           {/* Pulse waves - reduced on mobile */}
           {(isMobile ? [1] : [1, 2]).map((i) => (
-            <div
+            <motion.div
               key={i}
               className="nucleus-pulse"
-              style={{ '--pulse-delay': `${i * 1.2}s`, '--pulse-dur': isMobile ? '5s' : '4s' }}
+              animate={isVisible ? {
+                scale: [1, 3, 1],
+                opacity: [0.4, 0, 0.4]
+              } : {}}
+              transition={{
+                duration: isMobile ? 5 : 4,
+                repeat: Infinity,
+                delay: i * 1.2,
+                ease: 'easeOut'
+              }}
             />
           ))}
         </div>
@@ -600,11 +659,12 @@ const Atom = () => {
                   return (
                     <motion.div
                       key={lang.name}
-                      className="electron-container"
+                      className={`electron-container ${activeParticle === lang.name ? 'active' : ''}`}
                       style={{
                         transform: `rotate(${angle}deg) translateX(${orbit.radius}px)`,
                         transformStyle: 'preserve-3d'
                       }}
+                      /* hover effects removed for performance */
                     >
                       {/* Billboard effect - use CSS animation on mobile */}
                       <div
@@ -630,41 +690,69 @@ const Atom = () => {
                             justifyContent: 'center'
                           }}
                         >
-                          <div className="electron">
+                          <motion.div
+                            className="electron"
+                            whileHover={!isMobile ? { scale: 1.25 } : {}}
+                            transition={{ type: 'spring', stiffness: 400, damping: 12 }}
+                          >
                             {/* Subtle outer glow - hidden on mobile for performance */}
                             {!isMobile && (
-                              <div
+                              <motion.div
                                 className="electron-glow electron-glow-outer"
                                 style={{
-                                  background: `radial-gradient(circle, ${lang.color}15 30%, transparent 70%)`,
-                                  '--glow-delay': `${lang.delay}s`,
-                                  '--glow-dur': '3.5s',
+                                  background: `radial-gradient(circle, ${lang.color}15 30%, transparent 70%)`
+                                }}
+                                animate={isVisible ? {
+                                  scale: [1.2, 1.5, 1.2],
+                                  opacity: [0.25, 0.45, 0.25]
+                                } : {}}
+                                transition={{
+                                  duration: 3.5,
+                                  repeat: Infinity,
+                                  delay: lang.delay,
+                                  ease: 'easeInOut'
                                 }}
                               />
                             )}
                             {!isMobile && (
-                              <div
+                              <motion.div
                                 className="electron-glow electron-glow-mid"
                                 style={{
-                                  background: `radial-gradient(circle, ${lang.color}20 35%, transparent 60%)`,
-                                  '--glow-delay': `${lang.delay + 0.2}s`,
-                                  '--glow-dur': '2.5s',
+                                  background: `radial-gradient(circle, ${lang.color}20 35%, transparent 60%)`
+                                }}
+                                animate={isVisible ? {
+                                  scale: [1.15, 1.35, 1.15],
+                                  opacity: [0.3, 0.5, 0.3]
+                                } : {}}
+                                transition={{
+                                  duration: 2.5,
+                                  repeat: Infinity,
+                                  delay: lang.delay + 0.2,
+                                  ease: 'easeInOut'
                                 }}
                               />
                             )}
                             {/* Inner glow - simplified on mobile */}
-                            <div
+                            <motion.div
                               className="electron-glow electron-glow-inner"
                               style={{
-                                background: `radial-gradient(circle, ${lang.color}${isMobile ? '40' : '30'} 40%, transparent 55%)`,
-                                '--glow-delay': `${lang.delay + 0.4}s`,
-                                '--glow-dur': isMobile ? '3s' : '1.8s',
+                                background: `radial-gradient(circle, ${lang.color}${isMobile ? '40' : '30'} 40%, transparent 55%)`
+                              }}
+                              animate={isVisible ? {
+                                scale: isMobile ? [1.1, 1.15, 1.1] : [1.1, 1.2, 1.1],
+                                opacity: isMobile ? [0.4, 0.5, 0.4] : [0.35, 0.55, 0.35]
+                              } : {}}
+                              transition={{
+                                duration: isMobile ? 3 : 1.8,
+                                repeat: Infinity,
+                                delay: lang.delay + 0.4,
+                                ease: 'easeInOut'
                               }}
                             />
 
                             {/* 3D Sphere core - static box-shadow on mobile */}
-                            <div
-                              className="electron-core static-electron-glow"
+                            <motion.div
+                              className={`electron-core ${isMobile ? 'static-electron-glow' : ''}`}
                               style={{
                                 '--glow-color': lang.color,
                                 '--sphere-color': lang.color,
@@ -675,6 +763,19 @@ const Atom = () => {
                                 `,
                                 borderColor: lang.color,
                               }}
+                              animate={!isMobile && isVisible ? {
+                                boxShadow: [
+                                  `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.2), 0 0 15px ${lang.color}35, 0 0 25px ${lang.color}18, 0 4px 12px rgba(0, 0, 0, 0.35)`,
+                                  `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.28), 0 0 22px ${lang.color}45, 0 0 35px ${lang.color}25, 0 4px 12px rgba(0, 0, 0, 0.35)`,
+                                  `inset -6px -6px 15px rgba(0, 0, 0, 0.5), inset 4px 4px 10px rgba(255, 255, 255, 0.2), 0 0 15px ${lang.color}35, 0 0 25px ${lang.color}18, 0 4px 12px rgba(0, 0, 0, 0.35)`
+                                ]
+                              } : {}}
+                              transition={{
+                                duration: 3.5,
+                                repeat: Infinity,
+                                delay: lang.delay,
+                                ease: 'easeInOut'
+                              }}
                             >
                               <div
                                 className="icon-wrapper"
@@ -682,7 +783,7 @@ const Atom = () => {
                               >
                                 {lang.icon}
                               </div>
-                            </div>
+                            </motion.div>
 
                             {/* Particle trail - hidden on mobile */}
                             {!isMobile && (
@@ -704,7 +805,30 @@ const Atom = () => {
                             )}
 
                             {/* Hover label */}
-                          </div>
+                            <AnimatePresence>
+                              {activeParticle === lang.name && (
+                                <motion.div
+                                  className="particle-label"
+                                  initial={{ opacity: 0, y: 18, scale: 0.85 }}
+                                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                                  exit={{ opacity: 0, y: 12, scale: 0.85 }}
+                                  transition={{ duration: 0.25, ease: 'easeOut' }}
+                                  style={{
+                                    borderColor: lang.color,
+                                    boxShadow: `0 0 25px ${lang.color}55, 0 0 50px ${lang.color}25, 0 6px 20px rgba(0, 0, 0, 0.35)`
+                                  }}
+                                >
+                                  <span className="label-text">{lang.name}</span>
+                                  <motion.span
+                                    className="label-glow"
+                                    style={{ background: lang.color }}
+                                    animate={{ opacity: [0.4, 0.9, 0.4] }}
+                                    transition={{ duration: 1.8, repeat: Infinity }}
+                                  />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
                         </div>
                       </div>
                     </motion.div>

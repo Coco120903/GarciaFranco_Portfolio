@@ -145,13 +145,6 @@
   margin-top: 2rem;
 }
 
-/* Pause all CSS animations when Atom is off-screen */
-.atom-paused *,
-.atom-paused *::before,
-.atom-paused *::after {
-  animation-play-state: paused !important;
-}
-
 /* Ambient floating particles */
 .ambient-particles {
   position: absolute;
@@ -331,16 +324,6 @@
     0 0 12px rgba(0, 212, 255, 0.3),
     inset -1px -1px 3px rgba(0, 0, 0, 0.3),
     inset 1px 1px 3px rgba(255, 255, 255, 0.5);
-  /* Transform-only pulsing for performance (no box-shadow animation) */
-  animation: protonPulse 1.8s ease-in-out infinite;
-  animation-delay: var(--p-delay, 0s);
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-@keyframes protonPulse {
-  0%, 100% { transform: scale(0.95); }
-  50% { transform: scale(1.12); }
 }
 
 /* Central neutron - main core sphere */
@@ -414,16 +397,6 @@
   box-shadow: 
     0 0 4px rgba(0, 212, 255, 0.25),
     inset 0 0 4px rgba(0, 212, 255, 0.1);
-  animation: nucleusWave var(--pulse-dur, 4s) ease-out infinite;
-  animation-delay: var(--pulse-delay, 0s);
-  will-change: transform, opacity;
-  transform: translateZ(0);
-}
-
-@keyframes nucleusWave {
-  0% { transform: scale(1); opacity: 0.4; }
-  60% { transform: scale(3); opacity: 0; }
-  100% { transform: scale(1); opacity: 0.4; }
 }
 
 /* Multiple glow layers for depth */
@@ -513,15 +486,6 @@
   );
   border: 1.5px solid rgba(150, 240, 255, 0.9);
   z-index: 20;
-  /* Transform-only pulsing for performance */
-  animation: corePulse 3s ease-in-out infinite;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-@keyframes corePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
 }
 
 /* Core inner highlight - specular reflection */
@@ -648,20 +612,6 @@
   transform: translate(-50%, -50%);
   filter: blur(8px);
   opacity: 0.5;
-}
-
-.electron-glow-outer,
-.electron-glow-mid,
-.electron-glow-inner {
-  animation: electronGlowPulse var(--glow-dur, 2.5s) ease-in-out infinite;
-  animation-delay: var(--glow-delay, 0s);
-  will-change: transform, opacity;
-  transform: translate(-50%, -50%) translateZ(0);
-}
-
-@keyframes electronGlowPulse {
-  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
-  50% { opacity: 0.55; transform: translate(-50%, -50%) scale(1.2); }
 }
 
 .electron-core {
