@@ -347,8 +347,7 @@ const Atom = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              onMouseEnter={() => setActiveParticle(lang.name)}
-              onMouseLeave={() => setActiveParticle(null)}
+              /* hover effects removed for performance */
               style={{ '--item-color': lang.color }}
             >
               <span className="tech-list-icon" style={{ color: lang.color }}>
@@ -594,19 +593,11 @@ const Atom = () => {
               }}
             >
               {/* Rotating container - use CSS animation on mobile for better performance */}
-              <motion.div
-                className={`orbital-plane ${isMobile ? (orbit.direction > 0 ? 'css-orbit-cw' : 'css-orbit-ccw') : ''}`}
+              <div
+                className={`orbital-plane ${orbit.direction > 0 ? 'css-orbit-cw' : 'css-orbit-ccw'}`}
                 style={{ 
                   transformStyle: 'preserve-3d',
                   '--orbit-duration': `${orbit.duration}s`
-                }}
-                animate={!isMobile && isVisible ? {
-                  rotateZ: [0, 360 * orbit.direction]
-                } : {}}
-                transition={{
-                  duration: orbit.duration,
-                  repeat: Infinity,
-                  ease: 'linear'
                 }}
               >
                 {/* Enhanced orbit ring with glow trail */}
@@ -673,23 +664,14 @@ const Atom = () => {
                         transform: `rotate(${angle}deg) translateX(${orbit.radius}px)`,
                         transformStyle: 'preserve-3d'
                       }}
-                      onHoverStart={() => setActiveParticle(lang.name)}
-                      onHoverEnd={() => setActiveParticle(null)}
+                      /* hover effects removed for performance */
                     >
                       {/* Billboard effect - use CSS animation on mobile */}
-                      <motion.div
-                        className={`electron-billboard ${isMobile ? (orbit.direction > 0 ? 'css-orbit-ccw' : 'css-orbit-cw') : ''}`}
+                      <div
+                        className={`electron-billboard ${orbit.direction > 0 ? 'css-orbit-ccw' : 'css-orbit-cw'}`}
                         style={{ 
                           transformStyle: 'preserve-3d',
                           '--orbit-duration': `${orbit.duration}s`
-                        }}
-                        animate={!isMobile && isVisible ? {
-                          rotateZ: [0, -360 * orbit.direction]
-                        } : {}}
-                        transition={{
-                          duration: orbit.duration,
-                          repeat: Infinity,
-                          ease: 'linear'
                         }}
                       >
                         <div
@@ -848,11 +830,11 @@ const Atom = () => {
                             </AnimatePresence>
                           </motion.div>
                         </div>
-                      </motion.div>
+                      </div>
                     </motion.div>
                   )
                 })}
-              </motion.div>
+              </div>
             </motion.div>
           )
         })}

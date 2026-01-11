@@ -70,20 +70,18 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: none;
   position: relative;
   overflow: hidden;
 }
 
+/* Hover/active effects removed for performance */
 .tech-list-item:hover,
 .tech-list-item.active {
-  background: rgba(var(--item-color-rgb, 0, 212, 255), 0.1);
-  border-color: var(--item-color, rgba(0, 212, 255, 0.3));
-  transform: translateY(-3px);
-}
-
-.tech-list-item.active {
-  box-shadow: 0 0 15px rgba(var(--item-color-rgb, 0, 212, 255), 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: transparent;
+  transform: none;
+  box-shadow: none;
 }
 
 .tech-list-icon {
@@ -120,13 +118,14 @@
   height: 7px;
   border-radius: 50%;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: none;
 }
 
+/* Hover/active effects removed for performance */
 .tech-list-item:hover .tech-list-indicator,
 .tech-list-item.active .tech-list-indicator {
-  opacity: 1;
-  box-shadow: 0 0 8px currentColor;
+  opacity: 0;
+  box-shadow: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
