@@ -19,6 +19,9 @@
   align-items: flex-start;
   justify-content: flex-start;
   overflow: hidden;
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Gradient separator between sections using opacity */

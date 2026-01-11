@@ -9,6 +9,9 @@
   scroll-snap-stop: always;
   z-index: 5;
   position: relative;
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .connect-inner {

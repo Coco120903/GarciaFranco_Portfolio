@@ -36,6 +36,8 @@ body {
   mix-blend-mode: difference;
   transition: none;
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .cursor-dot {
@@ -44,9 +46,10 @@ body {
   height: 8px;
   background: #ffffff;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(0);
   transition: transform 0.05s ease-out, opacity 0.2s ease;
   will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .cursor-outline {
@@ -141,6 +144,9 @@ body::before {
   animation: gradientShift 50s ease-in-out infinite;
   pointer-events: none;
   z-index: 1;
+  will-change: background-position;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Floating particles background */
@@ -182,6 +188,9 @@ body::after {
   pointer-events: none;
   z-index: 2;
   opacity: 0.55;
+  will-change: background-position;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .App {
@@ -191,6 +200,7 @@ body::after {
   position: relative;
   overflow: visible;
   z-index: 5;
+  isolation: isolate;
 }
 
 main {
@@ -205,6 +215,8 @@ main {
   min-height: 88vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  contain: layout style paint;
+  transform: translateZ(0);
 }
 
 .navbar {
