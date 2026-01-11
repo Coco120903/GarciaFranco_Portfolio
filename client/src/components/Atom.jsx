@@ -259,20 +259,6 @@ const Atom = () => {
     { rotateX: 45, rotateY: -60, rotateZ: 60, duration: 36, radius: 165, direction: 1, thickness: 1.3 }
   ]), [])
 
-  // Floating particles for ambient effect - reduced on mobile for performance
-  const floatingParticles = useMemo(() => {
-    const count = isMobile ? 12 : 40
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      size: Math.random() * 3 + 1,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: Math.random() * 15 + 10,
-      delay: Math.random() * 5,
-      opacity: Math.random() * 0.4 + 0.1
-    }))
-  }, [isMobile])
-
   // Energy beams from nucleus - reduced on mobile for performance
   const energyBeams = useMemo(() => {
     const count = isMobile ? 6 : 12
@@ -377,35 +363,7 @@ const Atom = () => {
 
       {/* Atom Container - Right Side */}
       <div className="atom-container">
-        {/* Ambient floating particles - only render if not too many for performance */}
-        {floatingParticles.length > 0 && (
-          <div className="ambient-particles">
-            {floatingParticles.map((particle) => (
-              <motion.div
-                key={particle.id}
-                className="ambient-particle"
-                style={{
-                  width: particle.size,
-                  height: particle.size,
-                  left: `${particle.x}%`,
-                  top: `${particle.y}%`,
-                }}
-                animate={{
-                  y: [0, -40, 0],
-                  x: [0, Math.random() * 30 - 15, 0],
-                  opacity: [particle.opacity, particle.opacity * 2.5, particle.opacity],
-                  scale: [1, 1.5, 1]
-                }}
-                transition={{
-                  duration: particle.duration,
-                  repeat: Infinity,
-                  delay: particle.delay,
-                  ease: 'easeInOut'
-                }}
-              />
-            ))}
-          </div>
-        )}
+        {/* Ambient floating particles removed for performance */}
 
         {/* Background energy grid - reduced on mobile for performance */}
         {!isMobile && (
