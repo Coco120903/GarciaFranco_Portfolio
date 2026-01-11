@@ -252,6 +252,17 @@ function MessageForm() {
   // Initialize EmailJS on component mount
   useEffect(() => {
     const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+    
+    // Debug: Log environment variables on mount
+    console.log('EmailJS Environment Variables on Mount:', {
+      PUBLIC_KEY: PUBLIC_KEY ? `${PUBLIC_KEY.substring(0, 10)}...` : 'Missing',
+      SERVICE_ID: SERVICE_ID ? SERVICE_ID : 'Missing',
+      TEMPLATE_ID: TEMPLATE_ID ? TEMPLATE_ID : 'Missing',
+      allEnvVars: import.meta.env
+    })
+    
     if (PUBLIC_KEY && PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
       emailjs.init(PUBLIC_KEY)
     }
@@ -337,9 +348,17 @@ function MessageForm() {
         template: TEMPLATE_ID
       })
       
-      // Show specific error message
+      // Show specific error message with helpful guidance
       let errorMessage = 'Failed to send message. '
-      if (err.text) {
+      if (err.status === 404 && err.text === 'Account not found') {
+        errorMessage = 'EmailJS account not found. Please verify your EmailJS credentials in the .env file:\n\n'
+        errorMessage += '1. Log in to https://www.emailjs.com/\n'
+        errorMessage += '2. Verify your Service ID, Template ID, and Public Key\n'
+        errorMessage += '3. Update the .env file with the correct values\n'
+        errorMessage += '4. Restart the dev server\n\n'
+        errorMessage += `Current Service ID: ${SERVICE_ID}\n`
+        errorMessage += `Current Template ID: ${TEMPLATE_ID}`
+      } else if (err.text) {
         errorMessage += err.text
       } else if (err.status) {
         errorMessage += `Error code: ${err.status}`
