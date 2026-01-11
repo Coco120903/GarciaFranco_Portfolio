@@ -87,6 +87,8 @@ const Home = ({ phase, tilt, setTilt }) => {
         src={profileImage}
         alt="Profile"
         className="profile-image"
+        loading="eager"
+        fetchPriority="high"
         initial={{ opacity: 0, top: '100%', left: '50%', x: '-50%', y: '-50%' }}
         animate={phase === 2 ? { opacity: 1, top: '50%', left: '50%', x: '-50%', y: '-50%' } : {}}
         transition={{ duration: 1, ease: 'easeOut' }}
