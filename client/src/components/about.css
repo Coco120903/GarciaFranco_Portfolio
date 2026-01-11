@@ -534,6 +534,10 @@
   .about-inner {
     padding: 0;
   }
+
+  .about-body {
+    text-align: justify;
+  }
 }
 
 @media (max-width: 640px) {
@@ -544,6 +548,10 @@
   .about-inner {
     padding: 0;
   }
+
+  .about-body {
+    text-align: justify;
+  }
 }
 
 @media (max-width: 480px) {
@@ -553,6 +561,10 @@
 
   .about-inner {
     padding: 0;
+  }
+
+  .about-body {
+    text-align: justify;
   }
 }
 
@@ -1219,15 +1231,22 @@
 /* Mobile - Reduce button size */
 @media (max-width: 768px) {
   .about-btn {
-    padding: 0.65rem 1.4rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.6rem;
   }
 }
 
 @media (max-width: 480px) {
   .about-btn {
-    padding: 0.55rem 1.2rem;
-    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.6rem;
   }
 }
 

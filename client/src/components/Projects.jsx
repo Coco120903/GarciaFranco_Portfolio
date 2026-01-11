@@ -48,7 +48,8 @@ const Projects = () => {
     subtitle: 'Thesis Project',
     description: 'A full-featured e-commerce gardening platform with advanced administrative controls, real-time customer communication, and end-to-end transactional workflows. The system includes a robust admin dashboard with analytics and inventory management, real-time chat for customer support, customizable product options such as pot selection, integrated online payments, and Google Maps–based location and delivery support. Built to support both operational efficiency and an enhanced user shopping experience.',
     image: '/images/BatinosThesis.png',
-    link: 'https://batinosgarden.shop/'
+    link: 'https://batinosgarden.shop/',
+    tags: ['JavaScript', 'React', 'Node.js', 'CSS', 'MongoDB']
   }
 
   const handleConfirmNavigate = () => {
@@ -107,6 +108,11 @@ const Projects = () => {
             <p className="featured-eyebrow">{featuredProject.subtitle}</p>
             <h3 className="featured-title">{featuredProject.title}</h3>
             <p className="featured-desc">{featuredProject.description}</p>
+            <div className="project-tags">
+              {featuredProject.tags.map((tag, idx) => (
+                <span key={idx} className="project-tag">{tag}</span>
+              ))}
+            </div>
             <div className="featured-actions">
               <button className="featured-cta" onClick={(e) => { e.stopPropagation(); setFeaturedOpen(true) }}>View Thesis</button>
             </div>
