@@ -369,36 +369,24 @@ const Atom = () => {
         {!isMobile && (
           <div className="energy-grid">
             {[...Array(8)].map((_, i) => (
-              <motion.div
+              <div
                 key={i}
                 className="grid-line horizontal"
-                style={{ top: `${10 + i * 10}%` }}
-                animate={{
-                  opacity: [0.02, 0.08, 0.02],
-                  scaleX: [0.7, 1, 0.7]
-                }}
-                transition={{
-                  duration: 5 + i * 0.5,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                  ease: 'easeInOut'
+                style={{
+                  top: `${10 + i * 10}%`,
+                  '--grid-dur': `${5 + i * 0.5}s`,
+                  '--grid-delay': `${i * 0.2}s`,
                 }}
               />
             ))}
             {[...Array(8)].map((_, i) => (
-              <motion.div
+              <div
                 key={i + 8}
                 className="grid-line vertical"
-                style={{ left: `${10 + i * 10}%` }}
-                animate={{
-                  opacity: [0.02, 0.08, 0.02],
-                  scaleY: [0.7, 1, 0.7]
-                }}
-                transition={{
-                  duration: 5 + i * 0.5,
-                  repeat: Infinity,
-                  delay: i * 0.2,
-                  ease: 'easeInOut'
+                style={{
+                  left: `${10 + i * 10}%`,
+                  '--grid-dur': `${5 + i * 0.5}s`,
+                  '--grid-delay': `${i * 0.2}s`,
                 }}
               />
             ))}

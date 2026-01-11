@@ -1761,8 +1761,9 @@
   transition: border-color 0.3s ease;
 }
 
+/* Hover effects removed for performance */
 .soft-card:hover .soft-card-border {
-  border-color: rgba(0, 212, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .soft-icon-wrap {
@@ -1777,9 +1778,10 @@
   transition: all 0.3s ease;
 }
 
+/* Hover effects removed for performance */
 .soft-card:hover .soft-icon-wrap {
-  background: rgba(0, 212, 255, 0.2);
-  transform: scale(1.1);
+  background: rgba(0, 212, 255, 0.1);
+  transform: none;
 }
 
 .soft-icon {

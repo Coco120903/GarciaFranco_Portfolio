@@ -436,8 +436,9 @@
   transition: border-color 0.3s ease;
 }
 
+/* Hover effects removed for performance */
 .soft-card-about:hover {
-  border-color: rgba(0, 212, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .soft-card-bg-about {
@@ -461,8 +462,29 @@
   position: relative;
 }
 
+/* Hover effects removed for performance */
 .soft-card-about:hover .soft-icon-wrap-about {
-  background: rgba(0, 212, 255, 0.1);
+  background: transparent;
+}
+
+/* Design & Creative hover effects removed for performance */
+.creative-tools-block-about .tech-tag-about {
+  transition: none;
+}
+.creative-tools-block-about .tech-tag-about::before {
+  opacity: 0;
+}
+.creative-tools-block-about .tech-tag-about:hover::before {
+  opacity: 0;
+}
+.creative-tools-block-about .tech-tag-about:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+.creative-tools-block-about .tech-tag-about:hover .tag-note-about {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
 }
 
 .soft-icon-about {
