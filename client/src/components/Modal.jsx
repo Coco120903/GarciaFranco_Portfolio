@@ -10,9 +10,22 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   useEffect(() => {
     if (!isOpen) return
     previousActive.current = document.activeElement
-    // lock background scroll
+    
+    // Check if mobile (only disable scroll on mobile)
+    const isMobile = window.innerWidth <= 768 || 
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    
+    // lock background scroll (mobile only)
     const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    let scrollY = 0
+    if (isMobile) {
+      scrollY = window.scrollY
+      document.body.style.overflow = 'hidden'
+      // Prevent scroll position jump by fixing position at current scroll
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+    }
 
     // focus the content container
     const focusEl = contentRef.current
@@ -44,7 +57,16 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     document.addEventListener('keydown', onKey)
     return () => {
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
+      if (isMobile) {
+        document.body.style.overflow = prevOverflow
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        // Restore scroll position
+        window.scrollTo(0, scrollY)
+      } else {
+        document.body.style.overflow = prevOverflow
+      }
       // restore focus
       if (previousActive.current && previousActive.current.focus) previousActive.current.focus()
     }
