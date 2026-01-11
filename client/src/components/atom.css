@@ -70,18 +70,16 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: none;
 }
 
-/* Hover/active effects removed for performance */
-.tech-list-item:hover,
-.tech-list-item.active {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: transparent;
-  transform: none;
-  box-shadow: none;
+/* Hover-only glow */
+.tech-list-item:hover {
+  border-color: rgba(0, 212, 255, 0.25);
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.10);
 }
 
 .tech-list-icon {
@@ -118,14 +116,11 @@
   height: 7px;
   border-radius: 50%;
   opacity: 0;
-  transition: none;
+  transition: opacity 0.2s ease;
 }
 
-/* Hover/active effects removed for performance */
-.tech-list-item:hover .tech-list-indicator,
-.tech-list-item.active .tech-list-indicator {
-  opacity: 0;
-  box-shadow: none;
+.tech-list-item:hover .tech-list-indicator {
+  opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -677,7 +672,39 @@
 }
 
 .electron-container:hover .electron-core {
-  transform: scale(1.15);
+  transform: none;
+}
+
+/* Electron glow pulse (CSS-driven, cheaper than JS) */
+.electron-glow-outer,
+.electron-glow-mid,
+.electron-glow-inner {
+  animation: electronGlowPulse var(--glow-dur, 2.5s) ease-in-out infinite;
+  animation-delay: var(--glow-delay, 0s);
+  will-change: transform, opacity;
+}
+
+@keyframes electronGlowPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
+  50% { opacity: 0.55; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* Electron trail pulse (CSS-driven) */
+.electron-trail {
+  animation: electronTrailPulse 2.5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes electronTrailPulse {
+  0%, 100% { opacity: 0.25; transform: scaleX(0.6); }
+  50% { opacity: 0.65; transform: scaleX(1.1); }
+}
+
+/* Pause animations when Atom is off-screen */
+.atom-paused *,
+.atom-paused *::before,
+.atom-paused *::after {
+  animation-play-state: paused !important;
 }
 
 .icon-wrapper {
