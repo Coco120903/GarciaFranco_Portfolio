@@ -219,12 +219,12 @@
 
 .skills-section-about {
   display: grid;
-  /* Left column fixed to match creative tools width, right column fills remaining space
+  /* Left column adaptive to match creative tools width, right column fills remaining space
      This ensures the Core Competencies block never overflows the site's padded area. */
-  grid-template-columns: minmax(0, 360px) 1fr;
+  grid-template-columns: minmax(0, clamp(280px, 25vw, 400px)) 1fr;
   gap: 2rem;
   width: 100%;
-  align-items: start;
+  align-items: stretch; /* Match heights of Design & Creative and Core Competencies */
 }
 
 /* Block Headers */
@@ -271,14 +271,10 @@
 .creative-tools-block-about {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
-  max-width: 360px; /* enforced column width */
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
-}
-
-/* Match Core Competencies height */
-.creative-tools-block-about {
-  height: 491.06px;
+  /* Height will match Core Competencies automatically via align-items: stretch */
 }
 
 .soft-skills-block-about {
@@ -287,16 +283,8 @@
   max-width: none;
   width: 100%;
   justify-self: stretch;
-  align-self: start;
   box-sizing: border-box;
-}
-
-/* Narrow the Creative Tools block so Core Competencies fits inside site padding */
-.creative-tools-block-about {
-  max-width: 360px;
-  width: 100%;
-  justify-self: start;
-  align-self: start;
+  /* Height will match Design & Creative automatically via align-items: stretch */
 }
 
 @media (max-width: 900px) {
@@ -819,12 +807,12 @@
 
 .skills-section-about {
   display: grid;
-  /* Left column fixed to match creative tools width, right column fills remaining space
+  /* Left column adaptive to match creative tools width, right column fills remaining space
      This ensures the Core Competencies block never overflows the site's padded area. */
-  grid-template-columns: minmax(0, 360px) 1fr;
+  grid-template-columns: minmax(0, clamp(280px, 25vw, 400px)) 1fr;
   gap: 2rem;
   width: 100%;
-  align-items: start;
+  align-items: stretch; /* Match heights of Design & Creative and Core Competencies */
 }
 
 /* Block Headers */
@@ -871,14 +859,10 @@
 .creative-tools-block-about {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
-  max-width: 360px; /* enforced column width */
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
-}
-
-/* Match Core Competencies height */
-.creative-tools-block-about {
-  height: 491.06px;
+  /* Height will match Core Competencies automatically via align-items: stretch */
 }
 
 .soft-skills-block-about {
@@ -887,16 +871,8 @@
   max-width: none;
   width: 100%;
   justify-self: stretch;
-  align-self: start;
   box-sizing: border-box;
-}
-
-/* Narrow the Creative Tools block so Core Competencies fits inside site padding */
-.creative-tools-block-about {
-  max-width: 360px;
-  width: 100%;
-  justify-self: start;
-  align-self: start;
+  /* Height will match Design & Creative automatically via align-items: stretch */
 }
 
 @media (max-width: 900px) {

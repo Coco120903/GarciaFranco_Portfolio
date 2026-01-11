@@ -1295,6 +1295,26 @@
   flex-shrink: 0;
 }
 
+/* Desktop: responsive highlight tags without scrollbar */
+@media (min-width: 901px) {
+  .edu-highlights {
+    flex-wrap: wrap; /* Allow wrapping on desktop to prevent scrollbar */
+    overflow: visible; /* Remove scrollbar on desktop */
+  }
+
+  .highlight-tag {
+    font-size: clamp(0.65rem, 1vw, 0.7rem); /* Responsive font size */
+    padding: clamp(0.35rem, 0.8vw, 0.4rem) clamp(0.65rem, 1.2vw, 0.75rem) clamp(0.35rem, 0.8vw, 0.4rem) clamp(1.4rem, 2.5vw, 1.6rem); /* Responsive padding */
+    flex-shrink: 1; /* Allow shrinking to fit */
+    flex-grow: 0; /* Don't grow beyond content */
+  }
+
+  .highlight-tag::before {
+    left: clamp(0.4rem, 0.8vw, 0.5rem); /* Responsive position */
+    font-size: clamp(0.6rem, 1vw, 0.65rem); /* Responsive star size */
+  }
+}
+
 .highlight-tag::before {
   content: '★';
   position: absolute;
@@ -1328,6 +1348,32 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
+}
+
+/* Desktop: Always 2x2 grid with responsive sizing */
+@media (min-width: 901px) {
+  .cert-grid {
+    grid-template-columns: repeat(2, 1fr); /* Always 2 columns */
+    gap: clamp(1rem, 2vw, 1.5rem); /* Responsive gap */
+  }
+
+  .cert-card {
+    padding: clamp(1.5rem, 2.5vw, 1.75rem) clamp(1.5rem, 2.5vw, 1.75rem) clamp(2.5rem, 4vw, 3rem); /* Responsive padding */
+  }
+
+  .cert-icon-wrap {
+    width: clamp(50px, 5vw, 60px);
+    height: clamp(50px, 5vw, 60px);
+    margin-bottom: clamp(0.8rem, 1.5vw, 1rem);
+  }
+
+  .cert-content h4 {
+    font-size: clamp(0.95rem, 1.3vw, 1.05rem); /* Responsive title */
+  }
+
+  .cert-desc {
+    font-size: clamp(0.85rem, 1.1vw, 0.9rem); /* Responsive description */
+  }
 }
 
 .cert-card {
