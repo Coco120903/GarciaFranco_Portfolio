@@ -365,28 +365,28 @@ const Atom = () => {
       <div className={`atom-container ${isVisible ? '' : 'atom-paused'}`}>
         {/* Ambient floating particles removed for performance */}
 
-        {/* Background energy grid - reduced on mobile for performance */}
+        {/* Background energy grid - reduced for desktop performance */}
         {!isMobile && (
           <div className="energy-grid">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <div
                 key={i}
                 className="grid-line horizontal"
                 style={{
-                  top: `${10 + i * 10}%`,
-                  '--grid-dur': `${5 + i * 0.5}s`,
-                  '--grid-delay': `${i * 0.2}s`,
+                  top: `${20 + i * 20}%`,
+                  '--grid-dur': `${8 + i * 1}s`,
+                  '--grid-delay': `${i * 0.4}s`,
                 }}
               />
             ))}
-            {[...Array(8)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <div
-                key={i + 8}
+                key={i + 4}
                 className="grid-line vertical"
                 style={{
-                  left: `${10 + i * 10}%`,
-                  '--grid-dur': `${5 + i * 0.5}s`,
-                  '--grid-delay': `${i * 0.2}s`,
+                  left: `${20 + i * 20}%`,
+                  '--grid-dur': `${8 + i * 1}s`,
+                  '--grid-delay': `${i * 0.4}s`,
                 }}
               />
             ))}
@@ -402,167 +402,82 @@ const Atom = () => {
             transformStyle: 'preserve-3d'
           }}
         >
-        {/* Outer aura glow - simplified on mobile */}
-        <motion.div
-          className="atom-aura aura-outer"
-          animate={isVisible ? {
-            scale: isMobile ? [1, 1.05, 1] : [1, 1.08, 1],
-            opacity: isMobile ? [0.2, 0.25, 0.2] : [0.15, 0.3, 0.15]
-          } : {}}
-          transition={{
-            duration: isMobile ? 8 : 5,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
-        />
-        {!isMobile && (
-          <motion.div
-            className="atom-aura aura-mid"
-            animate={isVisible ? {
-              scale: [1.05, 1.12, 1.05],
-              opacity: [0.2, 0.4, 0.2],
-              rotate: [0, 180, 360]
-            } : {}}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          />
-        )}
+        {/* Outer aura glow - single layer for desktop performance */}
+        <div className={`atom-aura aura-outer ${!isVisible ? 'atom-paused' : ''}`} />
 
         {/* Complex Multi-Layer Nucleus */}
         <div className="nucleus-container">
-          {/* Outer glow layers - simplified on mobile */}
-          <motion.div
-            className="nucleus-glow nucleus-glow-outer"
-            animate={isVisible ? {
-              scale: isMobile ? [1, 1.3, 1] : [1, 1.5, 1],
-              opacity: isMobile ? [0.3, 0.4, 0.3] : [0.2, 0.5, 0.2],
-              rotate: isMobile ? 0 : [0, 180, 360]
-            } : {}}
-            transition={{
-              duration: isMobile ? 10 : 8,
-              repeat: Infinity,
-              ease: 'easeInOut'
+          {/* Outer glow layers - single layer for desktop performance */}
+          <div
+            className={`nucleus-glow nucleus-glow-outer ${!isVisible ? 'atom-paused' : ''}`}
+            style={{
+              animationDuration: isMobile ? '10s' : '8s'
             }}
           />
-          {!isMobile && (
-            <motion.div
-              className="nucleus-glow nucleus-glow-mid"
-              animate={isVisible ? {
-                scale: [1.1, 1.4, 1.1],
-                opacity: [0.3, 0.6, 0.3],
-                rotate: [0, -120, -240]
-              } : {}}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: 'easeInOut'
-              }}
-            />
-          )}
-          <motion.div
-            className="nucleus-glow nucleus-glow-inner"
-            animate={isVisible ? {
-              scale: isMobile ? [1, 1.15, 1] : [1, 1.25, 1],
-              opacity: isMobile ? [0.6, 0.8, 0.6] : [0.5, 0.9, 0.5]
-            } : {}}
-            transition={{
-              duration: isMobile ? 4 : 2.5,
-              repeat: Infinity,
-              ease: 'easeInOut'
+          <div
+            className={`nucleus-glow nucleus-glow-inner ${!isVisible ? 'atom-paused' : ''}`}
+            style={{
+              animationDuration: isMobile ? '4s' : '3s'
             }}
           />
           
           {/* Nucleus core with orbiting particles */}
           <div className="nucleus-core">
-            {/* Outer proton ring - use CSS animation on mobile for better performance */}
-            <motion.div
-              className={`proton-ring proton-ring-outer ${isMobile ? 'css-rotate' : ''}`}
-              animate={!isMobile && isVisible ? { rotate: 360 } : {}}
-              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+            {/* Outer proton ring - CSS animation for desktop performance */}
+            <div
+              className={`proton-ring proton-ring-outer ${isMobile ? 'css-rotate' : 'css-rotate-desktop'} ${!isVisible ? 'atom-paused' : ''}`}
+              style={{ animationDuration: '10s' }}
             >
-              {(isMobile ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5, 6, 7]).map((i) => (
-                <motion.div
+              {(isMobile ? [0, 1, 2, 3] : [0, 1, 2, 3, 4, 5]).map((i) => (
+                <div
                   key={i}
-                  className={`proton proton-outer ${isMobile ? 'static-glow' : ''}`}
+                  className={`proton proton-outer ${isMobile ? 'static-glow' : 'desktop-glow-pulse'} ${!isVisible ? 'atom-paused' : ''}`}
                   style={{
-                    transform: `rotate(${i * (isMobile ? 90 : 45)}deg) translateX(18px)`
-                  }}
-                  animate={!isMobile && isVisible ? {
-                    scale: [0.9, 1.15, 0.9]
-                  } : {}}
-                  transition={{
-                    duration: 1.8,
-                    repeat: Infinity,
-                    delay: i * 0.15,
-                    ease: 'easeInOut'
+                    transform: `rotate(${i * (isMobile ? 90 : 60)}deg) translateX(18px)`,
+                    animationDelay: `${i * 0.2}s`,
+                    animationDuration: '2s'
                   }}
                 />
               ))}
-            </motion.div>
+            </div>
 
-            {/* Inner proton ring - use CSS animation on mobile */}
-            <motion.div
-              className={`proton-ring proton-ring-inner ${isMobile ? 'css-rotate-reverse' : ''}`}
-              animate={!isMobile && isVisible ? { rotate: -360 } : {}}
-              transition={{ duration: 7, repeat: Infinity, ease: 'linear' }}
+            {/* Inner proton ring - CSS animation for desktop performance */}
+            <div
+              className={`proton-ring proton-ring-inner ${isMobile ? 'css-rotate-reverse' : 'css-rotate-reverse-desktop'} ${!isVisible ? 'atom-paused' : ''}`}
+              style={{ animationDuration: '7s' }}
             >
-              {(isMobile ? [0, 1, 2] : [0, 1, 2, 3, 4]).map((i) => (
-                <motion.div
+              {(isMobile ? [0, 1, 2] : [0, 1, 2, 3]).map((i) => (
+                <div
                   key={i}
-                  className={`proton proton-inner ${isMobile ? 'static-glow' : ''}`}
+                  className={`proton proton-inner ${isMobile ? 'static-glow' : 'desktop-glow-pulse'} ${!isVisible ? 'atom-paused' : ''}`}
                   style={{
-                    transform: `rotate(${i * (isMobile ? 120 : 72)}deg) translateX(10px)`
-                  }}
-                  animate={!isMobile && isVisible ? {
-                    scale: [1, 1.25, 1]
-                  } : {}}
-                  transition={{
-                    duration: 1.4,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                    ease: 'easeInOut'
+                    transform: `rotate(${i * (isMobile ? 120 : 90)}deg) translateX(10px)`,
+                    animationDelay: `${i * 0.25}s`,
+                    animationDuration: '1.6s'
                   }}
                 />
               ))}
-            </motion.div>
+            </div>
             
-            {/* Central core sphere - simplified box-shadow on mobile */}
-            <motion.div
-              className={`core-center ${isMobile ? 'static-core-glow' : ''}`}
-              animate={!isMobile && isVisible ? {
-                scale: [1, 1.08, 1]
-              } : (isMobile && isVisible ? { scale: [1, 1.05, 1] } : {})}
-              transition={{
-                duration: isMobile ? 4 : 3,
-                repeat: Infinity,
-                ease: 'easeInOut'
+            {/* Central core sphere - CSS animation for desktop performance */}
+            <div
+              className={`core-center ${isMobile ? 'static-core-glow' : 'desktop-core-pulse'} ${!isVisible ? 'atom-paused' : ''}`}
+              style={{
+                animationDuration: isMobile ? '4s' : '3s'
               }}
             >
               {/* Core inner highlight */}
               <div className="core-highlight" />
-            </motion.div>
+            </div>
           </div>
 
-          {/* Pulse waves - reduced on mobile */}
-          {(isMobile ? [1] : [1, 2]).map((i) => (
-            <motion.div
-              key={i}
-              className="nucleus-pulse"
-              animate={isVisible ? {
-                scale: [1, 3, 1],
-                opacity: [0.4, 0, 0.4]
-              } : {}}
-              transition={{
-                duration: isMobile ? 5 : 4,
-                repeat: Infinity,
-                delay: i * 1.2,
-                ease: 'easeOut'
-              }}
-            />
-          ))}
+          {/* Pulse waves - single pulse for desktop performance */}
+          <div
+            className={`nucleus-pulse ${!isVisible ? 'atom-paused' : ''}`}
+            style={{
+              animationDuration: isMobile ? '5s' : '4s'
+            }}
+          />
         </div>
 
         {/* Unified Orbital Systems */}
@@ -678,33 +593,13 @@ const Atom = () => {
                         >
                           <div className="electron">
                             {/* Subtle outer glow - hidden on mobile for performance */}
-                            {!isMobile && (
-                              <div
-                                className="electron-glow electron-glow-outer"
-                                style={{
-                                  background: `radial-gradient(circle, ${lang.color}15 30%, transparent 70%)`,
-                                  '--glow-delay': `${lang.delay}s`,
-                                  '--glow-dur': '3.5s',
-                                }}
-                              />
-                            )}
-                            {!isMobile && (
-                              <div
-                                className="electron-glow electron-glow-mid"
-                                style={{
-                                  background: `radial-gradient(circle, ${lang.color}20 35%, transparent 60%)`,
-                                  '--glow-delay': `${lang.delay + 0.2}s`,
-                                  '--glow-dur': '2.5s',
-                                }}
-                              />
-                            )}
-                            {/* Inner glow - simplified on mobile */}
+                            {/* Single glow layer for desktop performance */}
                             <div
                               className="electron-glow electron-glow-inner"
                               style={{
-                                background: `radial-gradient(circle, ${lang.color}${isMobile ? '40' : '30'} 40%, transparent 55%)`,
-                                '--glow-delay': `${lang.delay + 0.4}s`,
-                                '--glow-dur': isMobile ? '3s' : '1.8s',
+                                background: `radial-gradient(circle, ${lang.color}${isMobile ? '40' : '25'} 40%, transparent 60%)`,
+                                '--glow-delay': `${lang.delay}s`,
+                                '--glow-dur': isMobile ? '3s' : '2.5s',
                               }}
                             />
 

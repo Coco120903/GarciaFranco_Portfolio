@@ -162,9 +162,8 @@
 
 .grid-line {
   position: absolute;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.08), transparent);
   pointer-events: none;
-  will-change: transform, opacity;
   animation-duration: var(--grid-dur, 10s);
   animation-delay: var(--grid-delay, 0s);
   animation-iteration-count: infinite;
@@ -228,7 +227,6 @@
   align-items: center;
   justify-content: center;
   transform-style: preserve-3d;
-  will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
   z-index: 1;
@@ -267,8 +265,8 @@
 }
 
 @keyframes nucleusGlowPulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.08); opacity: 0.7; }
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.06); opacity: 0.6; }
 }
 
 /* Inner glow layer */
@@ -374,7 +372,7 @@
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Pulse rings emanating from nucleus */
+/* Pulse rings emanating from nucleus - CSS animation for performance */
 .nucleus-pulse {
   position: absolute;
   width: 25px;
@@ -385,6 +383,13 @@
   box-shadow: 
     0 0 4px rgba(0, 212, 255, 0.25),
     inset 0 0 4px rgba(0, 212, 255, 0.1);
+  animation: nucleusPulseWave 4s ease-out infinite;
+}
+
+@keyframes nucleusPulseWave {
+  0% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(2.5); opacity: 0; }
+  100% { transform: scale(2.5); opacity: 0; }
 }
 
 /* Multiple glow layers for depth */
@@ -613,13 +618,12 @@
   justify-content: center;
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
-  /* Enhanced 3D sphere effect */
+  /* Simplified 3D sphere effect for performance */
   box-shadow: 
-    inset -4px -4px 12px rgba(0, 0, 0, 0.45),
-    inset 3px 3px 9px rgba(255, 255, 255, 0.2),
-    0 0 10px var(--glow-color, rgba(0, 212, 255, 0.35)),
-    0 0 16px var(--glow-color, rgba(0, 212, 255, 0.18)),
-    3px 6px 10px rgba(0, 0, 0, 0.35);
+    inset -4px -4px 10px rgba(0, 0, 0, 0.4),
+    inset 2px 2px 6px rgba(255, 255, 255, 0.15),
+    0 0 8px var(--glow-color, rgba(0, 212, 255, 0.3)),
+    2px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Main specular highlight - top left */
@@ -666,12 +670,9 @@
 }
 
 /* Electron glow pulse (CSS-driven, cheaper than JS) */
-.electron-glow-outer,
-.electron-glow-mid,
 .electron-glow-inner {
   animation: electronGlowPulse var(--glow-dur, 4s) ease-in-out infinite;
   animation-delay: var(--glow-delay, 0s);
-  will-change: transform, opacity;
 }
 
 @keyframes electronGlowPulse {
@@ -681,8 +682,7 @@
 
 /* Electron trail pulse (CSS-driven) */
 .electron-trail {
-  animation: electronTrailPulse 3.5s ease-in-out infinite;
-  will-change: transform, opacity;
+  animation: electronTrailPulse 4s ease-in-out infinite;
 }
 
 @keyframes electronTrailPulse {
@@ -1233,6 +1233,34 @@
   animation: rotate-counter-clockwise var(--orbit-duration, 20s) linear infinite;
 }
 
+/* CSS rotation for desktop proton rings (performance optimization) */
+.css-rotate-desktop {
+  animation: rotate-clockwise 10s linear infinite;
+}
+
+.css-rotate-reverse-desktop {
+  animation: rotate-counter-clockwise 7s linear infinite;
+}
+
+/* Desktop glow pulse animations (CSS-driven for performance) */
+.desktop-glow-pulse {
+  animation: desktopProtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes desktopProtonPulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.desktop-core-pulse {
+  animation: desktopCorePulse 3s ease-in-out infinite;
+}
+
+@keyframes desktopCorePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
 /* Static glow for protons on mobile (no JS animation) */
 .static-glow {
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.7), inset 0 0 4px rgba(255, 255, 255, 0.5);
@@ -1253,14 +1281,7 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 @supports (transform: translate3d(0, 0, 0)) {
-  .atom-wrapper,
-  .orbital-plane,
-  .orbital-path,
-  .electron-container,
-  .electron,
-  .electron-core,
-  .nucleus-container {
-    will-change: transform;
+  .atom-wrapper {
     backface-visibility: hidden;
   }
 }
