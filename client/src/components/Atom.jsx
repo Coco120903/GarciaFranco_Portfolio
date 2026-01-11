@@ -41,14 +41,16 @@ const Atom = () => {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
   // Less intensive spring config on mobile for better performance
-  const springConfig = isMobile 
-    ? { stiffness: 50, damping: 30, mass: 1.2 }
-    : { stiffness: 80, damping: 25, mass: 0.8 }
+  const springConfig = useMemo(() => (
+    isMobile
+      ? { stiffness: 50, damping: 30, mass: 1.2 }
+      : { stiffness: 80, damping: 25, mass: 0.8 }
+  ), [isMobile])
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), springConfig)
   const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springConfig)
 
   // Language data with enhanced visual properties
-  const languages = [
+  const languages = useMemo(() => ([
         {
           name: 'Dart',
           color: '#0175C2',
@@ -246,16 +248,16 @@ const Atom = () => {
         </svg>
       )
     }
-  ]
+  ]), [])
 
   // Enhanced orbital configurations
-  const orbits = [
+  const orbits = useMemo(() => ([
     { rotateX: 72, rotateY: 0, rotateZ: 0, duration: 18, radius: 165, direction: 1, thickness: 2.5 },
     { rotateX: 0, rotateY: 72, rotateZ: 55, duration: 24, radius: 165, direction: -1, thickness: 2 },
     { rotateX: 40, rotateY: 50, rotateZ: 110, duration: 28, radius: 165, direction: 1, thickness: 1.8 },
     { rotateX: 60, rotateY: 30, rotateZ: 20, duration: 32, radius: 165, direction: -1, thickness: 1.5 },
     { rotateX: 45, rotateY: -60, rotateZ: 60, duration: 36, radius: 165, direction: 1, thickness: 1.3 }
-  ]
+  ]), [])
 
   // Floating particles for ambient effect - reduced on mobile for performance
   const floatingParticles = useMemo(() => {
@@ -287,7 +289,7 @@ const Atom = () => {
   const mouseMoveTimeoutRef = useRef(null)
   
   const handleMouseMove = useCallback((e) => {
-    if (!atomRef.current || !wrapperRef.current || isMobile) return
+    if (!atomRef.current || !wrapperRef.current || isMobile || !isVisible) return
     
     // Throttle mouse move events for better performance
     if (mouseMoveTimeoutRef.current) {
@@ -304,23 +306,25 @@ const Atom = () => {
       const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
       
       const proximityThreshold = 320
+      const near = distance < proximityThreshold
       
-      if (distance < proximityThreshold) {
-        setIsNearAtom(true)
+      // Avoid re-rendering every mousemove: only update state when it changes
+      setIsNearAtom((prev) => (prev === near ? prev : near))
+
+      if (near) {
         const x = (e.clientX - wrapperRect.left) / wrapperRect.width - 0.5
         const y = (e.clientY - wrapperRect.top) / wrapperRect.height - 0.5
         const proximityFactor = 1 - (distance / proximityThreshold)
         mouseX.set(x * proximityFactor)
         mouseY.set(y * proximityFactor)
       } else {
-        setIsNearAtom(false)
         mouseX.set(0)
         mouseY.set(0)
       }
       
       mouseMoveTimeoutRef.current = null
     })
-  }, [isMobile, mouseX, mouseY])
+  }, [isMobile, isVisible, mouseX, mouseY])
 
   const handleMouseLeave = useCallback(() => {
     if (mouseMoveTimeoutRef.current) {
