@@ -31,12 +31,13 @@ body {
 /* Custom cursor */
 .custom-cursor {
   position: fixed;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: none;
   will-change: transform;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
 
@@ -141,10 +142,9 @@ body::before {
     rgba(0, 0, 0, 1) 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 50s ease-in-out infinite;
+  animation: gradientShift 80s linear infinite;
   pointer-events: none;
   z-index: 1;
-  will-change: background-position;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -184,11 +184,10 @@ body::after {
     radial-gradient(2px 2px at 58% 38%, #00d4ff, rgba(0, 212, 255, 0));
   background-size: 200% 200%;
   background-repeat: no-repeat;
-  animation: particleFloat 50s ease-in-out infinite;
+  animation: particleFloat 80s linear infinite;
   pointer-events: none;
   z-index: 2;
   opacity: 0.55;
-  will-change: background-position;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -238,10 +237,11 @@ main {
   left: -6rem;
   width: 100vw;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: -1;
+  transform: translateZ(0);
 }
 
 .logo {
@@ -1152,5 +1152,25 @@ main {
   }
   50% {
     box-shadow: 0 0 40px rgba(0, 212, 255, 0.2), inset 0 0 40px rgba(0, 212, 255, 0.1);
+  }
+}
+
+/* Reduced motion for accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  body::before,
+  body::after {
+    animation: none !important;
+  }
+  
+  .custom-cursor {
+    display: none !important;
   }
 }

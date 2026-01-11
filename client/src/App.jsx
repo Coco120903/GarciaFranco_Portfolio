@@ -15,7 +15,6 @@ function App() {
   const [phase, setPhase] = useState(0)
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [activeSection, setActiveSection] = useState('home')
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 })
   const [isIdle, setIsIdle] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -87,21 +86,28 @@ function App() {
     let targetY = 0
     let currentX = 0
     let currentY = 0
-    const lerpFactor = 0.35 // Responsiveness factor (higher = more responsive)
+    let lastUpdateX = 0
+    let lastUpdateY = 0
+    const lerpFactor = 0.35
+    const cursorElement = document.querySelector('.custom-cursor')
 
     const animate = () => {
-      // Smooth interpolation using lerp with higher factor for less delay
       const dx = targetX - currentX
       const dy = targetY - currentY
       
-      // Use distance-based adaptive lerp for better responsiveness
       const distance = Math.sqrt(dx * dx + dy * dy)
       const adaptiveFactor = distance > 10 ? lerpFactor * 1.5 : lerpFactor
       
       currentX += dx * adaptiveFactor
       currentY += dy * adaptiveFactor
       
-      setCursorPos({ x: currentX, y: currentY })
+      // Only update DOM directly, avoid React state updates for performance
+      if (cursorElement && (Math.abs(currentX - lastUpdateX) > 0.5 || Math.abs(currentY - lastUpdateY) > 0.5)) {
+        cursorElement.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`
+        lastUpdateX = currentX
+        lastUpdateY = currentY
+      }
+      
       animationFrameId = requestAnimationFrame(animate)
     }
 
@@ -173,7 +179,6 @@ function App() {
       {/* Custom Cursor */}
       <div 
         className={`custom-cursor ${isIdle ? 'idle' : ''} ${isHovering ? 'hover' : ''}`}
-        style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
       >
         <div className="cursor-dot"></div>
         <div className="cursor-outline"></div>

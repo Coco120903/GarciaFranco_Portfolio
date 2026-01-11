@@ -207,10 +207,12 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 2.5rem;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  transform: translateZ(0);
 }
 
 .connect-form-header {
