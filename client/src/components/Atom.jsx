@@ -275,6 +275,52 @@ const Atom = () => {
   // Throttle mouse move for better performance
   const mouseMoveTimeoutRef = useRef(null)
   const lastMouseUpdate = useRef(0)
+  const lastAppliedMotion = useRef({ x: 0, y: 0, near: false })
+  const wrapperMetricsRef = useRef({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    centerX: 0,
+    centerY: 0,
+    lastUpdate: 0,
+  })
+
+  const updateWrapperMetrics = useCallback((force = false) => {
+    const el = wrapperRef.current
+    if (!el) return
+
+    const now = (typeof performance !== 'undefined' ? performance.now() : Date.now())
+    if (!force && (now - wrapperMetricsRef.current.lastUpdate) < 250) return
+
+    const r = el.getBoundingClientRect()
+    wrapperMetricsRef.current = {
+      left: r.left,
+      top: r.top,
+      width: r.width || 1,
+      height: r.height || 1,
+      centerX: r.left + r.width / 2,
+      centerY: r.top + r.height / 2,
+      lastUpdate: now,
+    }
+  }, [])
+
+  // Keep cached geometry reasonably fresh without forcing layout on every mousemove
+  useEffect(() => {
+    if (isMobile) return
+
+    const onResize = () => updateWrapperMetrics(true)
+    const onScroll = () => updateWrapperMetrics(true)
+
+    updateWrapperMetrics(true)
+    window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [isMobile, updateWrapperMetrics])
   
   const handleMouseMove = useCallback((e) => {
     if (!atomRef.current || !wrapperRef.current || isMobile || !isVisible) return
@@ -292,34 +338,49 @@ const Atom = () => {
     }
     
     mouseMoveTimeoutRef.current = requestAnimationFrame(() => {
-      const wrapperRect = wrapperRef.current.getBoundingClientRect()
-      const centerX = wrapperRect.left + wrapperRect.width / 2
-      const centerY = wrapperRect.top + wrapperRect.height / 2
-      
-      const distanceX = e.clientX - centerX
-      const distanceY = e.clientY - centerY
-      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY)
-      
+      // Update cached metrics occasionally; avoid forcing layout every frame
+      updateWrapperMetrics(false)
+      const { left, top, width, height, centerX, centerY } = wrapperMetricsRef.current
+
+      const dx = e.clientX - centerX
+      const dy = e.clientY - centerY
+      const distanceSq = dx * dx + dy * dy
+
       const proximityThreshold = 320
-      const near = distance < proximityThreshold
+      const proximityThresholdSq = proximityThreshold * proximityThreshold
+      const near = distanceSq < proximityThresholdSq
       
       // Avoid re-rendering every mousemove: only update state when it changes
       setIsNearAtom((prev) => (prev === near ? prev : near))
       
       if (near) {
-        const x = (e.clientX - wrapperRect.left) / wrapperRect.width - 0.5
-        const y = (e.clientY - wrapperRect.top) / wrapperRect.height - 0.5
+        // Only pay sqrt cost when actually near (and thus applying motion)
+        const distance = Math.sqrt(distanceSq)
+        const x = (e.clientX - left) / width - 0.5
+        const y = (e.clientY - top) / height - 0.5
         const proximityFactor = 1 - (distance / proximityThreshold)
-        mouseX.set(x * proximityFactor)
-        mouseY.set(y * proximityFactor)
+        const nextX = x * proximityFactor
+        const nextY = y * proximityFactor
+
+        // Avoid tiny MotionValue updates that still trigger work
+        const prev = lastAppliedMotion.current
+        if (prev.near !== near || Math.abs(prev.x - nextX) > 0.01 || Math.abs(prev.y - nextY) > 0.01) {
+          mouseX.set(nextX)
+          mouseY.set(nextY)
+          lastAppliedMotion.current = { x: nextX, y: nextY, near }
+        }
       } else {
-        mouseX.set(0)
-        mouseY.set(0)
+        const prev = lastAppliedMotion.current
+        if (prev.near || prev.x !== 0 || prev.y !== 0) {
+          mouseX.set(0)
+          mouseY.set(0)
+          lastAppliedMotion.current = { x: 0, y: 0, near: false }
+        }
       }
       
       mouseMoveTimeoutRef.current = null
     })
-  }, [isMobile, isVisible, mouseX, mouseY])
+  }, [isMobile, isVisible, mouseX, mouseY, updateWrapperMetrics])
 
   const handleMouseLeave = useCallback(() => {
     if (mouseMoveTimeoutRef.current) {
@@ -328,6 +389,7 @@ const Atom = () => {
     }
     mouseX.set(0)
     mouseY.set(0)
+    lastAppliedMotion.current = { x: 0, y: 0, near: false }
     setIsNearAtom(false)
   }, [mouseX, mouseY])
 
