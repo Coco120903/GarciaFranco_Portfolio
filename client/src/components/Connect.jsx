@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import emailjs from '@emailjs/browser'
 import './Connect.css'
 
+// Trigger redeploy to load environment variables from Vercel
+
 const ConfirmationModal = ({ isOpen, onConfirm, onCancel, label, href }) => {
   useEffect(() => {
     if (!isOpen) return
@@ -260,7 +262,9 @@ function MessageForm() {
       PUBLIC_KEY: PUBLIC_KEY ? `${PUBLIC_KEY.substring(0, 10)}...` : 'Missing',
       SERVICE_ID: SERVICE_ID ? SERVICE_ID : 'Missing',
       TEMPLATE_ID: TEMPLATE_ID ? TEMPLATE_ID : 'Missing',
-      allEnvVars: import.meta.env
+      isProduction: import.meta.env.PROD,
+      hostname: typeof window !== 'undefined' ? window.location.hostname : 'N/A',
+      allEnvVars: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_'))
     })
     
     if (PUBLIC_KEY && PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
@@ -299,11 +303,13 @@ function MessageForm() {
     const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
     const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
-    // Debug: Log environment variables (remove in production)
-    console.log('EmailJS Config:', {
-      SERVICE_ID: SERVICE_ID ? 'Set' : 'Missing',
-      TEMPLATE_ID: TEMPLATE_ID ? 'Set' : 'Missing',
-      PUBLIC_KEY: PUBLIC_KEY ? 'Set' : 'Missing'
+    // Debug: Log environment variables
+    console.log('EmailJS Config Check:', {
+      SERVICE_ID: SERVICE_ID ? `${SERVICE_ID.substring(0, 8)}...` : 'Missing',
+      TEMPLATE_ID: TEMPLATE_ID ? TEMPLATE_ID : 'Missing',
+      PUBLIC_KEY: PUBLIC_KEY ? `${PUBLIC_KEY.substring(0, 8)}...` : 'Missing',
+      isProduction: import.meta.env.PROD,
+      allViteEnvVars: Object.keys(import.meta.env).filter(key => key.startsWith('VITE_'))
     })
 
     // Check if EmailJS is configured
@@ -313,19 +319,24 @@ function MessageForm() {
         PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
       setLoading(false)
       // Detect if we're in production (Vercel)
-      const isProduction = import.meta.env.PROD || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('vercel.com')
+      const isProduction = import.meta.env.PROD || (typeof window !== 'undefined' && (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('vercel.com')))
       let errorMessage = 'EmailJS not configured. '
       if (isProduction) {
-        errorMessage += 'Environment variables are missing in Vercel.\n\n'
-        errorMessage += 'To fix:\n'
+        errorMessage += 'Environment variables are missing or not loaded.\n\n'
+        errorMessage += 'If you just added them in Vercel:\n'
         errorMessage += '1. Go to your Vercel project dashboard\n'
-        errorMessage += '2. Navigate to Settings → Environment Variables\n'
-        errorMessage += '3. Add these variables:\n'
+        errorMessage += '2. Navigate to Deployments\n'
+        errorMessage += '3. Click "Redeploy" on the latest deployment\n'
+        errorMessage += '   (Environment variables are embedded at build time)\n\n'
+        errorMessage += 'If variables are already set:\n'
+        errorMessage += '1. Verify in Settings → Environment Variables\n'
+        errorMessage += '2. Check that all 3 variables are set:\n'
         errorMessage += '   - VITE_EMAILJS_SERVICE_ID\n'
         errorMessage += '   - VITE_EMAILJS_TEMPLATE_ID\n'
         errorMessage += '   - VITE_EMAILJS_PUBLIC_KEY\n'
-        errorMessage += '4. Select all environments (Production, Preview, Development)\n'
-        errorMessage += '5. Redeploy your project'
+        errorMessage += '3. Make sure they\'re set for "All Environments"\n'
+        errorMessage += '4. Redeploy your project\n\n'
+        errorMessage += `Debug: SERVICE_ID=${SERVICE_ID ? 'Set' : 'Missing'}, TEMPLATE_ID=${TEMPLATE_ID ? 'Set' : 'Missing'}, PUBLIC_KEY=${PUBLIC_KEY ? 'Set' : 'Missing'}`
       } else {
         errorMessage += 'Please check your .env file and restart the server.\n\n'
         errorMessage += 'See EMAILJS_SETUP.md for instructions.'
