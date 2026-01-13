@@ -312,7 +312,25 @@ function MessageForm() {
         TEMPLATE_ID === 'YOUR_TEMPLATE_ID' || 
         PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
       setLoading(false)
-      setStatus({ type: 'error', text: 'EmailJS not configured. Please check your .env file and restart the server. See EMAILJS_SETUP.md for instructions.' })
+      // Detect if we're in production (Vercel)
+      const isProduction = import.meta.env.PROD || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('vercel.com')
+      let errorMessage = 'EmailJS not configured. '
+      if (isProduction) {
+        errorMessage += 'Environment variables are missing in Vercel.\n\n'
+        errorMessage += 'To fix:\n'
+        errorMessage += '1. Go to your Vercel project dashboard\n'
+        errorMessage += '2. Navigate to Settings → Environment Variables\n'
+        errorMessage += '3. Add these variables:\n'
+        errorMessage += '   - VITE_EMAILJS_SERVICE_ID\n'
+        errorMessage += '   - VITE_EMAILJS_TEMPLATE_ID\n'
+        errorMessage += '   - VITE_EMAILJS_PUBLIC_KEY\n'
+        errorMessage += '4. Select all environments (Production, Preview, Development)\n'
+        errorMessage += '5. Redeploy your project'
+      } else {
+        errorMessage += 'Please check your .env file and restart the server.\n\n'
+        errorMessage += 'See EMAILJS_SETUP.md for instructions.'
+      }
+      setStatus({ type: 'error', text: errorMessage })
       return
     }
 
@@ -349,21 +367,40 @@ function MessageForm() {
       })
       
       // Show specific error message with helpful guidance
+      // Detect if we're in production (Vercel)
+      const isProduction = import.meta.env.PROD || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('vercel.com')
       let errorMessage = 'Failed to send message. '
       if (err.status === 404 && err.text === 'Account not found') {
-        errorMessage = 'EmailJS account not found. Please verify your EmailJS credentials in the .env file:\n\n'
-        errorMessage += '1. Log in to https://www.emailjs.com/\n'
-        errorMessage += '2. Verify your Service ID, Template ID, and Public Key\n'
-        errorMessage += '3. Update the .env file with the correct values\n'
-        errorMessage += '4. Restart the dev server\n\n'
-        errorMessage += `Current Service ID: ${SERVICE_ID}\n`
-        errorMessage += `Current Template ID: ${TEMPLATE_ID}`
+        errorMessage = 'EmailJS account not found. Please verify your EmailJS credentials:\n\n'
+        if (isProduction) {
+          errorMessage += '1. Log in to https://www.emailjs.com/\n'
+          errorMessage += '2. Verify your Service ID, Template ID, and Public Key\n'
+          errorMessage += '3. Go to Vercel → Settings → Environment Variables\n'
+          errorMessage += '4. Update the environment variables with correct values\n'
+          errorMessage += '5. Redeploy your project\n\n'
+        } else {
+          errorMessage += '1. Log in to https://www.emailjs.com/\n'
+          errorMessage += '2. Verify your Service ID, Template ID, and Public Key\n'
+          errorMessage += '3. Update the .env file with the correct values\n'
+          errorMessage += '4. Restart the dev server\n\n'
+        }
+        errorMessage += `Current Service ID: ${SERVICE_ID || 'Missing'}\n`
+        errorMessage += `Current Template ID: ${TEMPLATE_ID || 'Missing'}`
       } else if (err.text) {
         errorMessage += err.text
+        if (isProduction && (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY)) {
+          errorMessage += '\n\nNote: Environment variables may be missing in Vercel. Check Settings → Environment Variables and redeploy.'
+        }
       } else if (err.status) {
         errorMessage += `Error code: ${err.status}`
+        if (isProduction && (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY)) {
+          errorMessage += '\n\nNote: Environment variables may be missing in Vercel. Check Settings → Environment Variables and redeploy.'
+        }
       } else {
         errorMessage += 'Please check your EmailJS configuration and try again.'
+        if (isProduction && (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY)) {
+          errorMessage += '\n\nNote: Environment variables may be missing in Vercel. Check Settings → Environment Variables and redeploy.'
+        }
       }
       
       setStatus({ 
