@@ -652,10 +652,9 @@
   opacity: 0.6;
 }
 
-/* CSS-only Floating Particles */
+/* CSS-only Floating Particles - Removed */
 .bg-particles-css {
-  position: absolute;
-  inset: 0;
+  display: none !important;
 }
 
 .bg-particles-css::before,
@@ -1327,9 +1326,7 @@
 }
 
 .highlight-tag:hover {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 165, 0, 0.15) 100%);
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-  transform: translateY(-2px);
+  /* Hover effect removed */
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2054,9 +2051,7 @@
 }
 
 .stat-item:hover {
-  background: rgba(0, 212, 255, 0.15);
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+  /* Hover effect removed */
 }
 
 .stat-value {
@@ -2084,7 +2079,8 @@
 }
 
 .stat-item:hover .stat-glow {
-  opacity: 1;
+  /* Hover effect removed */
+  opacity: 0;
 }
 
 .summary-corner {

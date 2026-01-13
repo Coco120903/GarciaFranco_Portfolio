@@ -38,17 +38,17 @@ const Atom = () => {
     return () => observer.disconnect()
   }, [])
 
-  // Advanced spring physics for ultra-smooth motion - optimized for mobile
+  // Advanced spring physics - optimized for performance on all devices
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  // Less intensive spring config on mobile for better performance
+  // Less intensive spring config for better performance on low-end devices
   const springConfig = useMemo(() => (
     isMobile
-      ? { stiffness: 50, damping: 30, mass: 1.2 }
-      : { stiffness: 80, damping: 25, mass: 0.8 }
+    ? { stiffness: 40, damping: 35, mass: 1.5 }
+    : { stiffness: 60, damping: 30, mass: 1.0 }
   ), [isMobile])
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), springConfig)
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springConfig)
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), springConfig)
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), springConfig)
 
   // Language data with enhanced visual properties
   const languages = useMemo(() => ([
@@ -274,11 +274,19 @@ const Atom = () => {
 
   // Throttle mouse move for better performance
   const mouseMoveTimeoutRef = useRef(null)
+  const lastMouseUpdate = useRef(0)
   
   const handleMouseMove = useCallback((e) => {
     if (!atomRef.current || !wrapperRef.current || isMobile || !isVisible) return
     
-    // Throttle mouse move events for better performance
+    // Aggressive throttling for better performance on low-end devices
+    const throttleDelay = 50 // ms - increased for better performance
+    const now = Date.now()
+    if (now - lastMouseUpdate.current < throttleDelay) {
+      return
+    }
+    lastMouseUpdate.current = now
+    
     if (mouseMoveTimeoutRef.current) {
       return
     }
@@ -297,7 +305,7 @@ const Atom = () => {
       
       // Avoid re-rendering every mousemove: only update state when it changes
       setIsNearAtom((prev) => (prev === near ? prev : near))
-
+      
       if (near) {
         const x = (e.clientX - wrapperRect.left) / wrapperRect.width - 0.5
         const y = (e.clientY - wrapperRect.top) / wrapperRect.height - 0.5
@@ -324,7 +332,7 @@ const Atom = () => {
   }, [mouseX, mouseY])
 
   return (
-      <div
+    <div
       ref={atomRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -365,28 +373,28 @@ const Atom = () => {
       <div className={`atom-container ${isVisible ? '' : 'atom-paused'}`}>
         {/* Ambient floating particles removed for performance */}
 
-        {/* Background energy grid - reduced for desktop performance */}
+        {/* Background energy grid - minimal for maximum performance */}
         {!isMobile && (
           <div className="energy-grid">
-            {[...Array(4)].map((_, i) => (
+            {[...Array(2)].map((_, i) => (
               <div
                 key={i}
                 className="grid-line horizontal"
                 style={{
-                  top: `${20 + i * 20}%`,
-                  '--grid-dur': `${8 + i * 1}s`,
-                  '--grid-delay': `${i * 0.4}s`,
+                  top: `${33 + i * 33}%`,
+                  '--grid-dur': `${12 + i * 2}s`,
+                  '--grid-delay': `${i * 0.6}s`,
                 }}
               />
             ))}
-            {[...Array(4)].map((_, i) => (
+            {[...Array(2)].map((_, i) => (
               <div
-                key={i + 4}
+                key={i + 2}
                 className="grid-line vertical"
                 style={{
-                  left: `${20 + i * 20}%`,
-                  '--grid-dur': `${8 + i * 1}s`,
-                  '--grid-delay': `${i * 0.4}s`,
+                  left: `${33 + i * 33}%`,
+                  '--grid-dur': `${12 + i * 2}s`,
+                  '--grid-delay': `${i * 0.6}s`,
                 }}
               />
             ))}
@@ -476,8 +484,8 @@ const Atom = () => {
             className={`nucleus-pulse ${!isVisible ? 'atom-paused' : ''}`}
             style={{
               animationDuration: isMobile ? '5s' : '4s'
-            }}
-          />
+              }}
+            />
         </div>
 
         {/* Unified Orbital Systems */}
@@ -636,7 +644,7 @@ const Atom = () => {
                             )}
                           </div>
                         </div>
-                      </div>
+                        </div>
                     </motion.div>
                   )
                 })}

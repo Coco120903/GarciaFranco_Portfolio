@@ -154,7 +154,7 @@ const Achievements = () => {
         <div className="bg-orb orb-1" />
         <div className="bg-orb orb-2" />
         <div className="bg-grid-pattern" />
-        <div className="bg-particles-css" />
+        {/* Dust particles removed */}
       </div>
 
       <div className="achievements-inner">
