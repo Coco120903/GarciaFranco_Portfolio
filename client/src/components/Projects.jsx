@@ -7,11 +7,11 @@ const Projects = () => {
   const projectList = [
     {
       id: 4,
-      title: "Responsive Grid System",
-      description: "Fluid grid layouts using CSS clamp and modern flexbox/grid techniques.",
-      tags: ["CSS", "Responsive Design", "Performance"],
-      image: "https://via.placeholder.com/600x400?text=Grid+System",
-      link: "#"
+      title: "Batino's Garden Farm Resort",
+      description: "A modern resort booking platform for events and celebrations. Features flexible booking options, package displays, and an image carousel showcasing facilities including spacious grounds, swimming pools, and event venues. Built with responsive design for a seamless booking experience across all devices.",
+      tags: ["React", "CSS", "JavaScript", "Next.js"],
+      image: "/images/BatinosResort.png",
+      link: "https://batinos-garden-resort.vercel.app/"
     },
     {
       id: 5,
@@ -43,6 +43,7 @@ const Projects = () => {
   }
 
   const [featuredOpen, setFeaturedOpen] = useState(false)
+  const [batinosOpen, setBatinosOpen] = useState(false)
   const featuredProject = {
     title: 'Batino\'s Garden',
     subtitle: 'Thesis Project',
@@ -56,6 +57,12 @@ const Projects = () => {
     // open in new tab and close modal
     window.open(featuredProject.link, '_blank', 'noopener')
     setFeaturedOpen(false)
+  }
+
+  const handleBatinosNavigate = () => {
+    // open in new tab and close modal
+    window.open('https://batinos-garden-resort.vercel.app/', '_blank', 'noopener')
+    setBatinosOpen(false)
   }
 
   const cardVariants = {
@@ -135,40 +142,50 @@ const Projects = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {projectList.map((project, index) => (
-            <motion.a 
-              key={project.id} 
-              href={project.link} 
-              className="project-card"
-              variants={cardVariants}
-              whileHover={{ 
-                y: -8, 
-                scale: 1.02,
-                transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
-              }}
-            >
-              <div className="project-image-wrapper">
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="project-image"
-                  loading="lazy"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                />
-                <div className="project-overlay" />
-              </div>
-              <div className="project-content">
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="project-tags">
-                  {project.tags.map((tag, idx) => (
-                    <span key={idx} className="project-tag">{tag}</span>
-                  ))}
+          {projectList.map((project, index) => {
+            const isBatinos = project.id === 4
+            return (
+              <motion.div
+                key={project.id}
+                className="project-card"
+                variants={cardVariants}
+                whileHover={{ 
+                  y: -8, 
+                  scale: 1.02,
+                  transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
+                }}
+                onClick={() => isBatinos ? setBatinosOpen(true) : window.open(project.link, '_blank', 'noopener')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    isBatinos ? setBatinosOpen(true) : window.open(project.link, '_blank', 'noopener')
+                  }
+                }}
+              >
+                <div className="project-image-wrapper">
+                  <motion.img
+                    src={project.image}
+                    alt={project.title}
+                    className="project-image"
+                    loading="lazy"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  />
+                  <div className="project-overlay" />
                 </div>
-              </div>
-            </motion.a>
-          ))}
+                <div className="project-content">
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-description">{project.description}</p>
+                  <div className="project-tags">
+                    {project.tags.map((tag, idx) => (
+                      <span key={idx} className="project-tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
         </motion.div>
         {/* Confirmation modal for featured project navigation */}
         <Modal isOpen={featuredOpen} onClose={() => setFeaturedOpen(false)} title={`Open ${featuredProject.title}?`}>
@@ -182,6 +199,21 @@ const Projects = () => {
             <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1rem', justifyContent: 'flex-end' }}>
               <button className="featured-cancel" onClick={() => setFeaturedOpen(false)}>Cancel</button>
               <button className="featured-confirm" onClick={handleConfirmNavigate}>Proceed</button>
+            </div>
+          </div>
+        </Modal>
+        {/* Confirmation modal for Batino's Garden Farm Resort project */}
+        <Modal isOpen={batinosOpen} onClose={() => setBatinosOpen(false)} title="Open Batino's Garden?">
+          <div style={{ padding: '1rem 1.25rem' }}>
+            <p style={{ margin: 0, color: 'rgba(255,255,255,0.9)' }}>
+              You are about to leave this site and proceed to: <strong>Batino's Garden Farm Resort</strong>.
+            </p>
+            <p style={{ marginTop: '0.6rem', color: 'rgba(255,255,255,0.8)' }}>
+              Do you want to continue?
+            </p>
+            <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1rem', justifyContent: 'flex-end' }}>
+              <button className="featured-cancel" onClick={() => setBatinosOpen(false)}>Cancel</button>
+              <button className="featured-confirm" onClick={handleBatinosNavigate}>Proceed</button>
             </div>
           </div>
         </Modal>
