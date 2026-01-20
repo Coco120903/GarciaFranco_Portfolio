@@ -192,11 +192,11 @@ const About = () => {
         >
           {modalType === 'cv' ? (
             <div className="gf-embed-wrap">
-              <iframe src="/IT-Intern_GarciaFranco_CV.pdf" title="Curriculum Vitae" frameBorder="0" />
+              <iframe src="/FrancoGarcia_CV.pdf" title="Curriculum Vitae" frameBorder="0" />
                 </div>
           ) : (
             <div className="gf-embed-wrap">
-              <iframe src="/IT-Intern_GarciaFranco_Resume.pdf" title="Resume" frameBorder="0" />
+              <iframe src="/FrancoGarcia_Resume.pdf" title="Resume" frameBorder="0" />
             </div>
           )}
         </Modal>
